@@ -5,42 +5,74 @@ package com.github.mcilloni.uplink.nano;
 @SuppressWarnings("hiding")
 public interface UplinkProto {
 
-  // enum ErrCode
-  public static final int EALREADYINVITED = 0;
-  public static final int EEMPTYCONV = 1;
-  public static final int ENAMEALREADYTAKEN = 2;
-  public static final int ENOCONV = 3;
-  public static final int ENOUSER = 4;
-  public static final int ENOTINVITED = 5;
-  public static final int ENOTMEMBER = 6;
-  public static final int ESELFINVITE = 7;
-  public static final int ESERVERFAULT = 8;
-  public static final int EBROKEPROTO = 9;
-  public static final int EAUTHFAIL = 10;
-
-  public static final class ErrCodeResp extends
+  public static final class Empty extends
       com.google.protobuf.nano.MessageNano {
-    public static final int SUCCESS_FIELD_NUMBER = 1;
-    public static final int ERR_CODE_FIELD_NUMBER = 2;
-    private int responseCase_ = 0;
-    private java.lang.Object response_;
-    public int getResponseCase() {
-      return this.responseCase_;
-    }
-    public ErrCodeResp clearResponse() {
-      this.responseCase_ = 0;
-      this.response_ = null;
-      return this;
-    }
 
-    private static volatile ErrCodeResp[] _emptyArray;
-    public static ErrCodeResp[] emptyArray() {
+    private static volatile Empty[] _emptyArray;
+    public static Empty[] emptyArray() {
       // Lazily initializes the empty array
       if (_emptyArray == null) {
         synchronized (
             com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
           if (_emptyArray == null) {
-            _emptyArray = new ErrCodeResp[0];
+            _emptyArray = new Empty[0];
+          }
+        }
+      }
+      return _emptyArray;
+    }
+
+    public Empty() {
+      clear();
+    }
+
+    public Empty clear() {
+      cachedSize = -1;
+      return this;
+    }
+
+    @Override
+    public Empty mergeFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      while (true) {
+        int tag = input.readTag();
+        switch (tag) {
+          case 0:
+            return this;
+          default: {
+            if (!com.google.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
+              return this;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    public static Empty parseFrom(byte[] data)
+        throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new Empty(), data);
+    }
+
+    public static Empty parseFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      return new Empty().mergeFrom(input);
+    }
+  }
+
+  public static final class BoolResp extends
+      com.google.protobuf.nano.MessageNano {
+
+    private static volatile BoolResp[] _emptyArray;
+    public static BoolResp[] emptyArray() {
+      // Lazily initializes the empty array
+      if (_emptyArray == null) {
+        synchronized (
+            com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
+          if (_emptyArray == null) {
+            _emptyArray = new BoolResp[0];
           }
         }
       }
@@ -48,43 +80,14 @@ public interface UplinkProto {
     }
 
     // optional bool success = 1;
-    public boolean hasSuccess() {
-      return this.responseCase_ == 1;
-    }
-    public boolean getSuccess() {
-      if (this.responseCase_ == 1) {
-        return (boolean) (java.lang.Boolean) this.response_;
-      }
-      return false;
-    }
-    public ErrCodeResp setSuccess(boolean value) {
-      this.responseCase_ = 1;
-      this.response_ = value;
-      return this;
-    }
+    public boolean success;
 
-    // optional .protodef.ErrCode err_code = 2;
-    public boolean hasErrCode() {
-      return this.responseCase_ == 2;
-    }
-    public int getErrCode() {
-      if (this.responseCase_ == 2) {
-        return (int) (java.lang.Integer) this.response_;
-      }
-      return com.github.mcilloni.uplink.nano.UplinkProto.EALREADYINVITED;
-    }
-    public ErrCodeResp setErrCode(int value) {
-      this.responseCase_ = 2;
-      this.response_ = value;
-      return this;
-    }
-
-    public ErrCodeResp() {
+    public BoolResp() {
       clear();
     }
 
-    public ErrCodeResp clear() {
-      clearResponse();
+    public BoolResp clear() {
+      success = false;
       cachedSize = -1;
       return this;
     }
@@ -92,13 +95,8 @@ public interface UplinkProto {
     @Override
     public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
-      if (this.responseCase_ == 1) {
-        output.writeBool(
-            1, (java.lang.Boolean) this.response_);
-      }
-      if (this.responseCase_ == 2) {
-        output.writeEnum(
-            2, (java.lang.Integer) this.response_);
+      if (this.success != false) {
+        output.writeBool(1, this.success);
       }
       super.writeTo(output);
     }
@@ -106,21 +104,15 @@ public interface UplinkProto {
     @Override
     protected int computeSerializedSize() {
       int size = super.computeSerializedSize();
-      if (this.responseCase_ == 1) {
+      if (this.success != false) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBoolSize(
-                1, (java.lang.Boolean) this.response_);
-      }
-      if (this.responseCase_ == 2) {
-        size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeEnumSize(
-                2, (java.lang.Integer) this.response_);
+            .computeBoolSize(1, this.success);
       }
       return size;
     }
 
     @Override
-    public ErrCodeResp mergeFrom(
+    public BoolResp mergeFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
       while (true) {
@@ -135,28 +127,22 @@ public interface UplinkProto {
             break;
           }
           case 8: {
-            this.response_ = input.readBool();
-            this.responseCase_ = 1;
-            break;
-          }
-          case 16: {
-            this.response_ = input.readEnum();
-            this.responseCase_ = 2;
+            this.success = input.readBool();
             break;
           }
         }
       }
     }
 
-    public static ErrCodeResp parseFrom(byte[] data)
+    public static BoolResp parseFrom(byte[] data)
         throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
-      return com.google.protobuf.nano.MessageNano.mergeFrom(new ErrCodeResp(), data);
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new BoolResp(), data);
     }
 
-    public static ErrCodeResp parseFrom(
+    public static BoolResp parseFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
-      return new ErrCodeResp().mergeFrom(input);
+      return new BoolResp().mergeFrom(input);
     }
   }
 
@@ -180,17 +166,20 @@ public interface UplinkProto {
     // optional string name = 1;
     public java.lang.String name;
 
-    // optional bytes public_key = 2;
+    // optional string pass = 2;
+    public java.lang.String pass;
+
+    // optional bytes public_key = 3;
     public byte[] publicKey;
 
-    // optional bytes enc_private_key = 3;
+    // optional bytes enc_private_key = 4;
     public byte[] encPrivateKey;
 
-    // optional string ch_token = 4;
-    public java.lang.String chToken;
+    // optional bytes key_iv = 5;
+    public byte[] keyIv;
 
-    // optional bytes enc_ch_token = 5;
-    public byte[] encChToken;
+    // optional bytes key_salt = 6;
+    public byte[] keySalt;
 
     public NewUserReq() {
       clear();
@@ -198,10 +187,11 @@ public interface UplinkProto {
 
     public NewUserReq clear() {
       name = "";
+      pass = "";
       publicKey = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
       encPrivateKey = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
-      chToken = "";
-      encChToken = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+      keyIv = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+      keySalt = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
       cachedSize = -1;
       return this;
     }
@@ -212,17 +202,20 @@ public interface UplinkProto {
       if (!this.name.equals("")) {
         output.writeString(1, this.name);
       }
+      if (!this.pass.equals("")) {
+        output.writeString(2, this.pass);
+      }
       if (!java.util.Arrays.equals(this.publicKey, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(2, this.publicKey);
+        output.writeBytes(3, this.publicKey);
       }
       if (!java.util.Arrays.equals(this.encPrivateKey, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(3, this.encPrivateKey);
+        output.writeBytes(4, this.encPrivateKey);
       }
-      if (!this.chToken.equals("")) {
-        output.writeString(4, this.chToken);
+      if (!java.util.Arrays.equals(this.keyIv, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        output.writeBytes(5, this.keyIv);
       }
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(5, this.encChToken);
+      if (!java.util.Arrays.equals(this.keySalt, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        output.writeBytes(6, this.keySalt);
       }
       super.writeTo(output);
     }
@@ -234,21 +227,25 @@ public interface UplinkProto {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
             .computeStringSize(1, this.name);
       }
+      if (!this.pass.equals("")) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(2, this.pass);
+      }
       if (!java.util.Arrays.equals(this.publicKey, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(2, this.publicKey);
+            .computeBytesSize(3, this.publicKey);
       }
       if (!java.util.Arrays.equals(this.encPrivateKey, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(3, this.encPrivateKey);
+            .computeBytesSize(4, this.encPrivateKey);
       }
-      if (!this.chToken.equals("")) {
+      if (!java.util.Arrays.equals(this.keyIv, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(4, this.chToken);
+            .computeBytesSize(5, this.keyIv);
       }
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+      if (!java.util.Arrays.equals(this.keySalt, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(5, this.encChToken);
+            .computeBytesSize(6, this.keySalt);
       }
       return size;
     }
@@ -273,19 +270,23 @@ public interface UplinkProto {
             break;
           }
           case 18: {
-            this.publicKey = input.readBytes();
+            this.pass = input.readString();
             break;
           }
           case 26: {
-            this.encPrivateKey = input.readBytes();
+            this.publicKey = input.readBytes();
             break;
           }
           case 34: {
-            this.chToken = input.readString();
+            this.encPrivateKey = input.readBytes();
             break;
           }
           case 42: {
-            this.encChToken = input.readBytes();
+            this.keyIv = input.readBytes();
+            break;
+          }
+          case 50: {
+            this.keySalt = input.readBytes();
             break;
           }
         }
@@ -306,18 +307,6 @@ public interface UplinkProto {
 
   public static final class NewUserResp extends
       com.google.protobuf.nano.MessageNano {
-    public static final int SESSION_INFO_FIELD_NUMBER = 1;
-    public static final int ERR_CODE_FIELD_NUMBER = 2;
-    private int responseCase_ = 0;
-    private java.lang.Object response_;
-    public int getResponseCase() {
-      return this.responseCase_;
-    }
-    public NewUserResp clearResponse() {
-      this.responseCase_ = 0;
-      this.response_ = null;
-      return this;
-    }
 
     private static volatile NewUserResp[] _emptyArray;
     public static NewUserResp[] emptyArray() {
@@ -334,44 +323,14 @@ public interface UplinkProto {
     }
 
     // optional .protodef.SessInfo session_info = 1;
-    public boolean hasSessionInfo() {
-      return this.responseCase_ == 1;
-    }
-    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo getSessionInfo() {
-      if (this.responseCase_ == 1) {
-        return (com.github.mcilloni.uplink.nano.UplinkProto.SessInfo) this.response_;
-      }
-      return null;
-    }
-    public NewUserResp setSessionInfo(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo value) {
-      if (value == null) { throw new java.lang.NullPointerException(); }
-      this.responseCase_ = 1;
-      this.response_ = value;
-      return this;
-    }
-
-    // optional .protodef.ErrCode err_code = 2;
-    public boolean hasErrCode() {
-      return this.responseCase_ == 2;
-    }
-    public int getErrCode() {
-      if (this.responseCase_ == 2) {
-        return (int) (java.lang.Integer) this.response_;
-      }
-      return com.github.mcilloni.uplink.nano.UplinkProto.EALREADYINVITED;
-    }
-    public NewUserResp setErrCode(int value) {
-      this.responseCase_ = 2;
-      this.response_ = value;
-      return this;
-    }
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo sessionInfo;
 
     public NewUserResp() {
       clear();
     }
 
     public NewUserResp clear() {
-      clearResponse();
+      sessionInfo = null;
       cachedSize = -1;
       return this;
     }
@@ -379,13 +338,8 @@ public interface UplinkProto {
     @Override
     public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
-      if (this.responseCase_ == 1) {
-        output.writeMessage(1,
-            (com.google.protobuf.nano.MessageNano) this.response_);
-      }
-      if (this.responseCase_ == 2) {
-        output.writeEnum(
-            2, (java.lang.Integer) this.response_);
+      if (this.sessionInfo != null) {
+        output.writeMessage(1, this.sessionInfo);
       }
       super.writeTo(output);
     }
@@ -393,15 +347,9 @@ public interface UplinkProto {
     @Override
     protected int computeSerializedSize() {
       int size = super.computeSerializedSize();
-      if (this.responseCase_ == 1) {
+      if (this.sessionInfo != null) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-          .computeMessageSize(1,
-              (com.google.protobuf.nano.MessageNano) this.response_);
-      }
-      if (this.responseCase_ == 2) {
-        size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeEnumSize(
-                2, (java.lang.Integer) this.response_);
+          .computeMessageSize(1, this.sessionInfo);
       }
       return size;
     }
@@ -422,17 +370,10 @@ public interface UplinkProto {
             break;
           }
           case 10: {
-            if (!(this.responseCase_ == 1)) {
-              this.response_ = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
+            if (this.sessionInfo == null) {
+              this.sessionInfo = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
             }
-            input.readMessage(
-                (com.google.protobuf.nano.MessageNano) this.response_);
-            this.responseCase_ = 1;
-            break;
-          }
-          case 16: {
-            this.response_ = input.readEnum();
-            this.responseCase_ = 2;
+            input.readMessage(this.sessionInfo);
             break;
           }
         }
@@ -455,7 +396,6 @@ public interface UplinkProto {
       com.google.protobuf.nano.MessageNano {
     public static final int STEP1_FIELD_NUMBER = 1;
     public static final int STEP2_FIELD_NUMBER = 2;
-    public static final int STEP3_FIELD_NUMBER = 3;
     private int loginStepsCase_ = 0;
     private java.lang.Object loginSteps_;
     public int getLoginStepsCase() {
@@ -481,53 +421,36 @@ public interface UplinkProto {
       return _emptyArray;
     }
 
-    // optional .protodef.Username step1 = 1;
+    // optional .protodef.AuthInfo step1 = 1;
     public boolean hasStep1() {
       return this.loginStepsCase_ == 1;
     }
-    public com.github.mcilloni.uplink.nano.UplinkProto.Username getStep1() {
+    public com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo getStep1() {
       if (this.loginStepsCase_ == 1) {
-        return (com.github.mcilloni.uplink.nano.UplinkProto.Username) this.loginSteps_;
+        return (com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo) this.loginSteps_;
       }
       return null;
     }
-    public LoginReq setStep1(com.github.mcilloni.uplink.nano.UplinkProto.Username value) {
+    public LoginReq setStep1(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo value) {
       if (value == null) { throw new java.lang.NullPointerException(); }
       this.loginStepsCase_ = 1;
       this.loginSteps_ = value;
       return this;
     }
 
-    // optional .protodef.FirstChallenge step2 = 2;
+    // optional .protodef.Challenge step2 = 2;
     public boolean hasStep2() {
       return this.loginStepsCase_ == 2;
     }
-    public com.github.mcilloni.uplink.nano.UplinkProto.FirstChallenge getStep2() {
+    public com.github.mcilloni.uplink.nano.UplinkProto.Challenge getStep2() {
       if (this.loginStepsCase_ == 2) {
-        return (com.github.mcilloni.uplink.nano.UplinkProto.FirstChallenge) this.loginSteps_;
+        return (com.github.mcilloni.uplink.nano.UplinkProto.Challenge) this.loginSteps_;
       }
       return null;
     }
-    public LoginReq setStep2(com.github.mcilloni.uplink.nano.UplinkProto.FirstChallenge value) {
+    public LoginReq setStep2(com.github.mcilloni.uplink.nano.UplinkProto.Challenge value) {
       if (value == null) { throw new java.lang.NullPointerException(); }
       this.loginStepsCase_ = 2;
-      this.loginSteps_ = value;
-      return this;
-    }
-
-    // optional .protodef.SecondChallenge step3 = 3;
-    public boolean hasStep3() {
-      return this.loginStepsCase_ == 3;
-    }
-    public com.github.mcilloni.uplink.nano.UplinkProto.SecondChallenge getStep3() {
-      if (this.loginStepsCase_ == 3) {
-        return (com.github.mcilloni.uplink.nano.UplinkProto.SecondChallenge) this.loginSteps_;
-      }
-      return null;
-    }
-    public LoginReq setStep3(com.github.mcilloni.uplink.nano.UplinkProto.SecondChallenge value) {
-      if (value == null) { throw new java.lang.NullPointerException(); }
-      this.loginStepsCase_ = 3;
       this.loginSteps_ = value;
       return this;
     }
@@ -553,10 +476,6 @@ public interface UplinkProto {
         output.writeMessage(2,
             (com.google.protobuf.nano.MessageNano) this.loginSteps_);
       }
-      if (this.loginStepsCase_ == 3) {
-        output.writeMessage(3,
-            (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
       super.writeTo(output);
     }
 
@@ -571,11 +490,6 @@ public interface UplinkProto {
       if (this.loginStepsCase_ == 2) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
           .computeMessageSize(2,
-              (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
-      if (this.loginStepsCase_ == 3) {
-        size += com.google.protobuf.nano.CodedOutputByteBufferNano
-          .computeMessageSize(3,
               (com.google.protobuf.nano.MessageNano) this.loginSteps_);
       }
       return size;
@@ -598,7 +512,7 @@ public interface UplinkProto {
           }
           case 10: {
             if (!(this.loginStepsCase_ == 1)) {
-              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.Username();
+              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo();
             }
             input.readMessage(
                 (com.google.protobuf.nano.MessageNano) this.loginSteps_);
@@ -607,20 +521,11 @@ public interface UplinkProto {
           }
           case 18: {
             if (!(this.loginStepsCase_ == 2)) {
-              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.FirstChallenge();
+              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.Challenge();
             }
             input.readMessage(
                 (com.google.protobuf.nano.MessageNano) this.loginSteps_);
             this.loginStepsCase_ = 2;
-            break;
-          }
-          case 26: {
-            if (!(this.loginStepsCase_ == 3)) {
-              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.SecondChallenge();
-            }
-            input.readMessage(
-                (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-            this.loginStepsCase_ = 3;
             break;
           }
         }
@@ -723,32 +628,36 @@ public interface UplinkProto {
     }
   }
 
-  public static final class FirstChallenge extends
+  public static final class AuthInfo extends
       com.google.protobuf.nano.MessageNano {
 
-    private static volatile FirstChallenge[] _emptyArray;
-    public static FirstChallenge[] emptyArray() {
+    private static volatile AuthInfo[] _emptyArray;
+    public static AuthInfo[] emptyArray() {
       // Lazily initializes the empty array
       if (_emptyArray == null) {
         synchronized (
             com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
           if (_emptyArray == null) {
-            _emptyArray = new FirstChallenge[0];
+            _emptyArray = new AuthInfo[0];
           }
         }
       }
       return _emptyArray;
     }
 
-    // optional bytes enc_ch_token = 1;
-    public byte[] encChToken;
+    // optional string name = 1;
+    public java.lang.String name;
 
-    public FirstChallenge() {
+    // optional string pass = 2;
+    public java.lang.String pass;
+
+    public AuthInfo() {
       clear();
     }
 
-    public FirstChallenge clear() {
-      encChToken = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+    public AuthInfo clear() {
+      name = "";
+      pass = "";
       cachedSize = -1;
       return this;
     }
@@ -756,8 +665,11 @@ public interface UplinkProto {
     @Override
     public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(1, this.encChToken);
+      if (!this.name.equals("")) {
+        output.writeString(1, this.name);
+      }
+      if (!this.pass.equals("")) {
+        output.writeString(2, this.pass);
       }
       super.writeTo(output);
     }
@@ -765,15 +677,19 @@ public interface UplinkProto {
     @Override
     protected int computeSerializedSize() {
       int size = super.computeSerializedSize();
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+      if (!this.name.equals("")) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(1, this.encChToken);
+            .computeStringSize(1, this.name);
+      }
+      if (!this.pass.equals("")) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(2, this.pass);
       }
       return size;
     }
 
     @Override
-    public FirstChallenge mergeFrom(
+    public AuthInfo mergeFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
       while (true) {
@@ -788,51 +704,55 @@ public interface UplinkProto {
             break;
           }
           case 10: {
-            this.encChToken = input.readBytes();
+            this.name = input.readString();
+            break;
+          }
+          case 18: {
+            this.pass = input.readString();
             break;
           }
         }
       }
     }
 
-    public static FirstChallenge parseFrom(byte[] data)
+    public static AuthInfo parseFrom(byte[] data)
         throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
-      return com.google.protobuf.nano.MessageNano.mergeFrom(new FirstChallenge(), data);
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new AuthInfo(), data);
     }
 
-    public static FirstChallenge parseFrom(
+    public static AuthInfo parseFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
-      return new FirstChallenge().mergeFrom(input);
+      return new AuthInfo().mergeFrom(input);
     }
   }
 
-  public static final class SecondChallenge extends
+  public static final class Challenge extends
       com.google.protobuf.nano.MessageNano {
 
-    private static volatile SecondChallenge[] _emptyArray;
-    public static SecondChallenge[] emptyArray() {
+    private static volatile Challenge[] _emptyArray;
+    public static Challenge[] emptyArray() {
       // Lazily initializes the empty array
       if (_emptyArray == null) {
         synchronized (
             com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
           if (_emptyArray == null) {
-            _emptyArray = new SecondChallenge[0];
+            _emptyArray = new Challenge[0];
           }
         }
       }
       return _emptyArray;
     }
 
-    // optional bytes final_challenge = 1;
-    public byte[] finalChallenge;
+    // optional bytes token = 1;
+    public byte[] token;
 
-    public SecondChallenge() {
+    public Challenge() {
       clear();
     }
 
-    public SecondChallenge clear() {
-      finalChallenge = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+    public Challenge clear() {
+      token = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
       cachedSize = -1;
       return this;
     }
@@ -840,8 +760,8 @@ public interface UplinkProto {
     @Override
     public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
-      if (!java.util.Arrays.equals(this.finalChallenge, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(1, this.finalChallenge);
+      if (!java.util.Arrays.equals(this.token, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        output.writeBytes(1, this.token);
       }
       super.writeTo(output);
     }
@@ -849,15 +769,15 @@ public interface UplinkProto {
     @Override
     protected int computeSerializedSize() {
       int size = super.computeSerializedSize();
-      if (!java.util.Arrays.equals(this.finalChallenge, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+      if (!java.util.Arrays.equals(this.token, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(1, this.finalChallenge);
+            .computeBytesSize(1, this.token);
       }
       return size;
     }
 
     @Override
-    public SecondChallenge mergeFrom(
+    public Challenge mergeFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
       while (true) {
@@ -872,22 +792,22 @@ public interface UplinkProto {
             break;
           }
           case 10: {
-            this.finalChallenge = input.readBytes();
+            this.token = input.readBytes();
             break;
           }
         }
       }
     }
 
-    public static SecondChallenge parseFrom(byte[] data)
+    public static Challenge parseFrom(byte[] data)
         throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
-      return com.google.protobuf.nano.MessageNano.mergeFrom(new SecondChallenge(), data);
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new Challenge(), data);
     }
 
-    public static SecondChallenge parseFrom(
+    public static Challenge parseFrom(
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
-      return new SecondChallenge().mergeFrom(input);
+      return new Challenge().mergeFrom(input);
     }
   }
 
@@ -895,8 +815,6 @@ public interface UplinkProto {
       com.google.protobuf.nano.MessageNano {
     public static final int STEP1_FIELD_NUMBER = 1;
     public static final int STEP2_FIELD_NUMBER = 2;
-    public static final int STEP3_FIELD_NUMBER = 3;
-    public static final int ERR_CODE_FIELD_NUMBER = 4;
     private int loginStepsCase_ = 0;
     private java.lang.Object loginSteps_;
     public int getLoginStepsCase() {
@@ -922,68 +840,36 @@ public interface UplinkProto {
       return _emptyArray;
     }
 
-    // optional string step1 = 1;
+    // optional .protodef.LoginAccepted step1 = 1;
     public boolean hasStep1() {
       return this.loginStepsCase_ == 1;
     }
-    public java.lang.String getStep1() {
+    public com.github.mcilloni.uplink.nano.UplinkProto.LoginAccepted getStep1() {
       if (this.loginStepsCase_ == 1) {
-        return (java.lang.String) (java.lang.String) this.loginSteps_;
+        return (com.github.mcilloni.uplink.nano.UplinkProto.LoginAccepted) this.loginSteps_;
       }
-      return "";
+      return null;
     }
-    public LoginResp setStep1(java.lang.String value) {
+    public LoginResp setStep1(com.github.mcilloni.uplink.nano.UplinkProto.LoginAccepted value) {
+      if (value == null) { throw new java.lang.NullPointerException(); }
       this.loginStepsCase_ = 1;
       this.loginSteps_ = value;
       return this;
     }
 
-    // optional .protodef.UserInfo step2 = 2;
+    // optional .protodef.SessInfo step2 = 2;
     public boolean hasStep2() {
       return this.loginStepsCase_ == 2;
     }
-    public com.github.mcilloni.uplink.nano.UplinkProto.UserInfo getStep2() {
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo getStep2() {
       if (this.loginStepsCase_ == 2) {
-        return (com.github.mcilloni.uplink.nano.UplinkProto.UserInfo) this.loginSteps_;
-      }
-      return null;
-    }
-    public LoginResp setStep2(com.github.mcilloni.uplink.nano.UplinkProto.UserInfo value) {
-      if (value == null) { throw new java.lang.NullPointerException(); }
-      this.loginStepsCase_ = 2;
-      this.loginSteps_ = value;
-      return this;
-    }
-
-    // optional .protodef.SessInfo step3 = 3;
-    public boolean hasStep3() {
-      return this.loginStepsCase_ == 3;
-    }
-    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo getStep3() {
-      if (this.loginStepsCase_ == 3) {
         return (com.github.mcilloni.uplink.nano.UplinkProto.SessInfo) this.loginSteps_;
       }
       return null;
     }
-    public LoginResp setStep3(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo value) {
+    public LoginResp setStep2(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo value) {
       if (value == null) { throw new java.lang.NullPointerException(); }
-      this.loginStepsCase_ = 3;
-      this.loginSteps_ = value;
-      return this;
-    }
-
-    // optional .protodef.ErrCode err_code = 4;
-    public boolean hasErrCode() {
-      return this.loginStepsCase_ == 4;
-    }
-    public int getErrCode() {
-      if (this.loginStepsCase_ == 4) {
-        return (int) (java.lang.Integer) this.loginSteps_;
-      }
-      return com.github.mcilloni.uplink.nano.UplinkProto.EALREADYINVITED;
-    }
-    public LoginResp setErrCode(int value) {
-      this.loginStepsCase_ = 4;
+      this.loginStepsCase_ = 2;
       this.loginSteps_ = value;
       return this;
     }
@@ -1002,20 +888,12 @@ public interface UplinkProto {
     public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
         throws java.io.IOException {
       if (this.loginStepsCase_ == 1) {
-        output.writeString(
-            1, (java.lang.String) this.loginSteps_);
+        output.writeMessage(1,
+            (com.google.protobuf.nano.MessageNano) this.loginSteps_);
       }
       if (this.loginStepsCase_ == 2) {
         output.writeMessage(2,
             (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
-      if (this.loginStepsCase_ == 3) {
-        output.writeMessage(3,
-            (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
-      if (this.loginStepsCase_ == 4) {
-        output.writeEnum(
-            4, (java.lang.Integer) this.loginSteps_);
       }
       super.writeTo(output);
     }
@@ -1025,23 +903,13 @@ public interface UplinkProto {
       int size = super.computeSerializedSize();
       if (this.loginStepsCase_ == 1) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(
-                1, (java.lang.String) this.loginSteps_);
+          .computeMessageSize(1,
+              (com.google.protobuf.nano.MessageNano) this.loginSteps_);
       }
       if (this.loginStepsCase_ == 2) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
           .computeMessageSize(2,
               (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
-      if (this.loginStepsCase_ == 3) {
-        size += com.google.protobuf.nano.CodedOutputByteBufferNano
-          .computeMessageSize(3,
-              (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-      }
-      if (this.loginStepsCase_ == 4) {
-        size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeEnumSize(
-                4, (java.lang.Integer) this.loginSteps_);
       }
       return size;
     }
@@ -1062,31 +930,21 @@ public interface UplinkProto {
             break;
           }
           case 10: {
-            this.loginSteps_ = input.readString();
+            if (!(this.loginStepsCase_ == 1)) {
+              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.LoginAccepted();
+            }
+            input.readMessage(
+                (com.google.protobuf.nano.MessageNano) this.loginSteps_);
             this.loginStepsCase_ = 1;
             break;
           }
           case 18: {
             if (!(this.loginStepsCase_ == 2)) {
-              this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.UserInfo();
-            }
-            input.readMessage(
-                (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-            this.loginStepsCase_ = 2;
-            break;
-          }
-          case 26: {
-            if (!(this.loginStepsCase_ == 3)) {
               this.loginSteps_ = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
             }
             input.readMessage(
                 (com.google.protobuf.nano.MessageNano) this.loginSteps_);
-            this.loginStepsCase_ = 3;
-            break;
-          }
-          case 32: {
-            this.loginSteps_ = input.readEnum();
-            this.loginStepsCase_ = 4;
+            this.loginStepsCase_ = 2;
             break;
           }
         }
@@ -1102,6 +960,111 @@ public interface UplinkProto {
             com.google.protobuf.nano.CodedInputByteBufferNano input)
         throws java.io.IOException {
       return new LoginResp().mergeFrom(input);
+    }
+  }
+
+  public static final class LoginAccepted extends
+      com.google.protobuf.nano.MessageNano {
+
+    private static volatile LoginAccepted[] _emptyArray;
+    public static LoginAccepted[] emptyArray() {
+      // Lazily initializes the empty array
+      if (_emptyArray == null) {
+        synchronized (
+            com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
+          if (_emptyArray == null) {
+            _emptyArray = new LoginAccepted[0];
+          }
+        }
+      }
+      return _emptyArray;
+    }
+
+    // optional .protodef.UserInfo user_info = 1;
+    public com.github.mcilloni.uplink.nano.UplinkProto.UserInfo userInfo;
+
+    // optional .protodef.Challenge challenge = 2;
+    public com.github.mcilloni.uplink.nano.UplinkProto.Challenge challenge;
+
+    public LoginAccepted() {
+      clear();
+    }
+
+    public LoginAccepted clear() {
+      userInfo = null;
+      challenge = null;
+      cachedSize = -1;
+      return this;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
+        throws java.io.IOException {
+      if (this.userInfo != null) {
+        output.writeMessage(1, this.userInfo);
+      }
+      if (this.challenge != null) {
+        output.writeMessage(2, this.challenge);
+      }
+      super.writeTo(output);
+    }
+
+    @Override
+    protected int computeSerializedSize() {
+      int size = super.computeSerializedSize();
+      if (this.userInfo != null) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+          .computeMessageSize(1, this.userInfo);
+      }
+      if (this.challenge != null) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+          .computeMessageSize(2, this.challenge);
+      }
+      return size;
+    }
+
+    @Override
+    public LoginAccepted mergeFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      while (true) {
+        int tag = input.readTag();
+        switch (tag) {
+          case 0:
+            return this;
+          default: {
+            if (!com.google.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
+              return this;
+            }
+            break;
+          }
+          case 10: {
+            if (this.userInfo == null) {
+              this.userInfo = new com.github.mcilloni.uplink.nano.UplinkProto.UserInfo();
+            }
+            input.readMessage(this.userInfo);
+            break;
+          }
+          case 18: {
+            if (this.challenge == null) {
+              this.challenge = new com.github.mcilloni.uplink.nano.UplinkProto.Challenge();
+            }
+            input.readMessage(this.challenge);
+            break;
+          }
+        }
+      }
+    }
+
+    public static LoginAccepted parseFrom(byte[] data)
+        throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new LoginAccepted(), data);
+    }
+
+    public static LoginAccepted parseFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      return new LoginAccepted().mergeFrom(input);
     }
   }
 
@@ -1128,8 +1091,11 @@ public interface UplinkProto {
     // optional bytes enc_private_key = 2;
     public byte[] encPrivateKey;
 
-    // optional bytes enc_ch_token = 3;
-    public byte[] encChToken;
+    // optional bytes key_iv = 5;
+    public byte[] keyIv;
+
+    // optional bytes key_salt = 6;
+    public byte[] keySalt;
 
     public UserInfo() {
       clear();
@@ -1138,7 +1104,8 @@ public interface UplinkProto {
     public UserInfo clear() {
       publicKey = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
       encPrivateKey = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
-      encChToken = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+      keyIv = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
+      keySalt = com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES;
       cachedSize = -1;
       return this;
     }
@@ -1152,8 +1119,11 @@ public interface UplinkProto {
       if (!java.util.Arrays.equals(this.encPrivateKey, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         output.writeBytes(2, this.encPrivateKey);
       }
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
-        output.writeBytes(3, this.encChToken);
+      if (!java.util.Arrays.equals(this.keyIv, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        output.writeBytes(5, this.keyIv);
+      }
+      if (!java.util.Arrays.equals(this.keySalt, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        output.writeBytes(6, this.keySalt);
       }
       super.writeTo(output);
     }
@@ -1169,9 +1139,13 @@ public interface UplinkProto {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
             .computeBytesSize(2, this.encPrivateKey);
       }
-      if (!java.util.Arrays.equals(this.encChToken, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+      if (!java.util.Arrays.equals(this.keyIv, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeBytesSize(3, this.encChToken);
+            .computeBytesSize(5, this.keyIv);
+      }
+      if (!java.util.Arrays.equals(this.keySalt, com.google.protobuf.nano.WireFormatNano.EMPTY_BYTES)) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+            .computeBytesSize(6, this.keySalt);
       }
       return size;
     }
@@ -1199,8 +1173,12 @@ public interface UplinkProto {
             this.encPrivateKey = input.readBytes();
             break;
           }
-          case 26: {
-            this.encChToken = input.readBytes();
+          case 42: {
+            this.keyIv = input.readBytes();
+            break;
+          }
+          case 50: {
+            this.keySalt = input.readBytes();
             break;
           }
         }
