@@ -10,47 +10,157 @@
  *
  */
 
+@file:JvmName("Uplink")
+@file:JvmMultifileClass
+
 package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkGrpc
 import com.github.mcilloni.uplink.nano.UplinkProto
+import com.google.common.util.concurrent.SettableFuture
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
 import io.grpc.stub.MetadataUtils
-import java.security.KeyPair
+import io.grpc.stub.StreamObserver
 
-internal fun connect(url: String, port: Int) =
-        UplinkGrpc.newBlockingStub(ManagedChannelBuilder.forAddress(url, port).usePlaintext(true).build())
+internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlockingStub) {
+    var asyncStub = astub
+        private set
 
-fun UplinkGrpc.UplinkBlockingStub.setSessionInfo(uid: Long, sessid: String) {
-    val metadata = Metadata()
-    metadata.put(Metadata.Key.of("uid", Metadata.ASCII_STRING_MARSHALLER), uid.toString())
-    metadata.put(Metadata.Key.of("sessid", Metadata.ASCII_STRING_MARSHALLER), sessid)
+    var blockingStub = bstub
+        private set
 
-    MetadataUtils.attachHeaders(this, metadata)
+    fun setSessionInfo(uid: Long, sessid: String) {
+        val metadata = Metadata()
+        metadata.put(Metadata.Key.of("uid", Metadata.ASCII_STRING_MARSHALLER), uid.toString())
+        metadata.put(Metadata.Key.of("sessid", Metadata.ASCII_STRING_MARSHALLER), sessid)
+
+        this.asyncStub = MetadataUtils.attachHeaders(this.asyncStub, metadata)
+        this.blockingStub = MetadataUtils.attachHeaders(this.blockingStub, metadata)
+    }
+}
+
+private fun connect(url: String, port: Int) : Stubs {
+    val chan = ManagedChannelBuilder.forAddress(url, port).usePlaintext(true).build()
+
+    val blocking = UplinkGrpc.newBlockingStub(chan)
+    val async = UplinkGrpc.newStub(chan)
+
+    return Stubs(async, blocking)
 }
 
 data class Session(val uid: Long, val sessid: String)
+data class Step1Result(val userInfo: UplinkProto.UserInfo, val challenge: UplinkProto.Challenge)
+
+private class LoginHandler(val futureInfo: SettableFuture<Step1Result>, val futureSess: SettableFuture<Session>) : StreamObserver<UplinkProto.LoginResp> {
+    private enum class State {
+        STEP1,
+        STEP2,
+        END
+    }
+
+    private var state = State.STEP1
+
+    override fun onCompleted() {
+        if (state != State.END) {
+            throw BrokeProtoException()
+        }
+    }
+
+    override fun onError(t: Throwable?) {
+        futureInfo.setException(t)
+        futureSess.setException(t)
+    }
+
+    override fun onNext(value: UplinkProto.LoginResp?) {
+        val step1 = value?.step1
+        val step2 = value?.step2
+
+        when {
+            step1 != null -> {
+                if (state != State.STEP1) {
+                    throw BrokeProtoException()
+                }
+
+                futureInfo.set(Step1Result(step1.userInfo, step1.challenge))
+
+                state = State.STEP2
+            }
+
+            step2 != null -> {
+                if (state != State.STEP2) {
+                    throw BrokeProtoException()
+                }
+
+                futureSess.set(Session(step2.uid, step2.sessionId))
+
+                state = State.END
+            }
+        }
+    }
+
+}
+
+fun login(url: String, port: Int, userName: String, authPass: String, keyPass: String) : UplinkConnection {
+    val stubs = connect(url, port)
+
+    val futureInfo = SettableFuture.create<Step1Result>()
+    val futureSession = SettableFuture.create<Session>()
+
+    val reqObserver = stubs.asyncStub.loginExchange(LoginHandler(futureInfo, futureSession))
+
+    val req = UplinkProto.LoginReq()
+    req.step1 = with(UplinkProto.AuthInfo()) {
+        name = userName
+        pass = authPass
+
+        this
+    }
+
+    reqObserver.onNext(req)
+
+    val (info, challenge) = futureInfo.get()
+
+    val user = UplinkUser.fromServerInfo(userName, keyPass, info)
+
+    val decrToken = user.decryptRsa(challenge.token)
+
+    req.step2 = with(UplinkProto.Challenge()) {
+        token = decrToken
+
+        this
+    }
+
+    reqObserver.onNext(req)
+
+    val session = futureSession.get()
+
+    return UplinkConnection(stubs, session, user)
+}
 
 fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: String) : UplinkConnection {
-    val stub = connect(url, port)
+    val stubs = connect(url, port)
 
     val existsReq = UplinkProto.Username()
     existsReq.name = name
-    val existsResp = stub.exists(existsReq)
+    val existsResp = stubs.blockingStub.exists(existsReq)
 
     if (existsResp.success) {
         throw NameAlreadyTakenException()
     }
 
     val user = UplinkUser.generateUser(name, keyPass)
-    val resp = stub.newUser(user.toNewUserReq(authPass))
+    val resp = stubs.blockingStub.newUser(user.toNewUserReq(authPass))
 
-    stub.setSessionInfo(resp.sessionInfo.uid, resp.sessionInfo.sessionId)
+    stubs.setSessionInfo(resp.sessionInfo.uid, resp.sessionInfo.sessionId)
 
-    return UplinkConnection(stub, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
+    return UplinkConnection(stubs, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
 }
 
-class UplinkConnection internal constructor(val stub: UplinkGrpc.UplinkBlockingStub, val sessInfo: Session, private val user: UplinkUser) {
+class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, private val user: UplinkUser) {
+    fun ping() : Boolean {
+        val resp = stubs.blockingStub.ping(UplinkProto.Empty())
 
+        return resp.success
+    }
 }

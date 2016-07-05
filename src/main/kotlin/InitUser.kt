@@ -13,24 +13,26 @@
 package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkProto
-import java.math.BigInteger
-import java.security.*
+import java.security.KeyFactory
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.SecureRandom
+import java.security.spec.MGF1ParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
 import javax.crypto.SecretKey
 import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.GCMParameterSpec
-import javax.crypto.spec.PBEKeySpec
-import javax.crypto.spec.SecretKeySpec
-import kotlin.reflect.KProperty
+import javax.crypto.spec.*
 
-internal const val RSA_KEY_STRENGHT = 4096
+internal const val RSA_KEY_STRENGHT = 2048
 internal const val AES_KEY_STRENGHT = 128
 internal const val GCM_IV_LENGHT = 12
 internal const val GCM_IV_LENGHT_BITS = GCM_IV_LENGHT * 8
 internal const val PBKDF2_ITERATIONS = 5000
+internal const val GCM_AAD_LENGTH_BITS = 128
 
+private val DEFAULT_OAEP_SPEC = OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT)
 
 private fun deriveAESKey(pass: String, salt: ByteArray): SecretKey {
     val pbkdfFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
@@ -46,9 +48,9 @@ private fun SecretKey.cipherGCM(msg: ByteArray, aad: ByteArray): EncryptedBytes 
     val cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
     val iv = ByteArray(GCM_IV_LENGHT)
-    SecureRandom.getInstanceStrong().nextBytes(iv)
+    SecureRandom().nextBytes(iv)
 
-    val spec = GCMParameterSpec(aad.size, iv)
+    val spec = GCMParameterSpec(GCM_AAD_LENGTH_BITS, iv)
 
     cipher.init(Cipher.ENCRYPT_MODE, this, spec)
     cipher.updateAAD(aad)
@@ -61,7 +63,7 @@ private fun SecretKey.cipherGCM(msg: ByteArray, aad: ByteArray): EncryptedBytes 
 private fun SecretKey.decipherGCM(encMsg: ByteArray, aad: ByteArray, iv: ByteArray): ByteArray {
     val cipher = Cipher.getInstance("AES/GCM/NoPadding")
 
-    val spec = GCMParameterSpec(aad.size, iv)
+    val spec = GCMParameterSpec(GCM_AAD_LENGTH_BITS, iv)
 
     cipher.init(Cipher.DECRYPT_MODE, this, spec)
     cipher.updateAAD(aad)
@@ -75,8 +77,8 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
                                      val keySalt: ByteArray, val encPrivKey: ByteArray) {
 
     companion object Factory {
-        fun fromServerInfo(name: String, pass: String, userInfo: UplinkProto.UserInfo): UplinkUser {
-            val mainKey = deriveAESKey(pass, userInfo.keySalt)
+        fun fromServerInfo(name: String, keyPass: String, userInfo: UplinkProto.UserInfo): UplinkUser {
+            val mainKey = deriveAESKey(keyPass, userInfo.keySalt)
 
             val rsaKeyFactory = KeyFactory.getInstance("RSA")
             val publicKey = rsaKeyFactory.generatePublic(X509EncodedKeySpec(userInfo.publicKey))
@@ -96,7 +98,7 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
             val keyPair = keyPairGen.genKeyPair()
 
             val keySalt = ByteArray(32)
-            SecureRandom.getInstanceStrong().nextBytes(keySalt)
+            SecureRandom().nextBytes(keySalt)
 
             val mainKey = deriveAESKey(pass, keySalt)
 
@@ -120,4 +122,16 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
 
         return newUserReq
     }
+
+    private fun rsaOp(bytes: ByteArray, mode: Int) : ByteArray {
+        val cipher = Cipher.getInstance("RSA/ECB/OAEPPadding");
+
+        cipher.init(mode, keyPair.private, DEFAULT_OAEP_SPEC)
+
+        return cipher.doFinal(bytes)
+    }
+
+    internal fun decryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.DECRYPT_MODE)
+    internal fun encryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.ENCRYPT_MODE)
+
 }

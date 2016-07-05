@@ -166,7 +166,7 @@ public interface UplinkProto {
     // optional string name = 1;
     public java.lang.String name;
 
-    // optional string pass = 2;
+    // optional string keyPass = 2;
     public java.lang.String pass;
 
     // optional bytes public_key = 3;
@@ -648,7 +648,7 @@ public interface UplinkProto {
     // optional string name = 1;
     public java.lang.String name;
 
-    // optional string pass = 2;
+    // optional string keyPass = 2;
     public java.lang.String pass;
 
     public AuthInfo() {
