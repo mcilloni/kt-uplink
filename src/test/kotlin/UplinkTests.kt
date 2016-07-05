@@ -15,29 +15,62 @@ import com.github.mcilloni.uplink.login
 import com.github.mcilloni.uplink.newUser
 import org.junit.Test as test
 import org.junit.Assert.*
+import org.junit.FixMethodOrder
+import org.junit.runners.MethodSorters
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.util.*
 
 const val URL = "localhost"
 const val PORT = 4444
-const val USER1 = "TestUser1"
-const val AUTHPWD1 = "User 1 auth password"
-const val KEYPWD1 = "User 1 key password"
+const val N_USERS = 1
 
-class UplinkTests {
-    var conn : UplinkConnection? = null
+data class UInfo(val name: String = genRandStr(), val authPass: String = genRandStr(), val keyPass: String = genRandStr())
 
-    @test fun testNewUser() {
-        val conn = newUser(URL, PORT, USER1, AUTHPWD1, KEYPWD1)
+val users = (1..N_USERS).map { UInfo() }
 
-        assert(conn.ping())
+private const val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-        println(conn.sessInfo)
+fun genRandStr(): String {
+    val text = CharArray(20);
+    val rng = Random()
+
+    for (i in 0..text.lastIndex) {
+        text[i] = characters[rng.nextInt(characters.length)]
     }
 
-    @test fun testLogin() {
-        conn = login(URL, PORT, USER1, AUTHPWD1, KEYPWD1)
+    return String(text);
+}
 
-        assert(conn?.ping() == true)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+class UplinkTests {
+    var conn: UplinkConnection? = null
 
-        println(conn?.sessInfo)
+    @test fun testANewUser() {
+        for (uinfo in users) {
+            println("new $uinfo")
+
+            val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+
+            assert(conn.ping())
+
+            println(conn.sessInfo)
+
+            val d = MessageDigest.getInstance("sha-256")
+            d.update(conn.user.keyPair.private.encoded)
+            println("priv_hash = ${BigInteger(d.digest()).toString(16)}")
+        }
+    }
+
+    @test fun testBLogin() {
+        for (uinfo in users) {
+            println("login as $uinfo")
+
+            conn = login(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+
+            assert(conn?.ping() == true)
+
+            println(conn?.sessInfo)
+        }
     }
 }

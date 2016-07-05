@@ -13,10 +13,7 @@
 package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkProto
-import java.security.KeyFactory
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.SecureRandom
+import java.security.*
 import java.security.spec.MGF1ParameterSpec
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
@@ -31,8 +28,6 @@ internal const val GCM_IV_LENGHT = 12
 internal const val GCM_IV_LENGHT_BITS = GCM_IV_LENGHT * 8
 internal const val PBKDF2_ITERATIONS = 5000
 internal const val GCM_AAD_LENGTH_BITS = 128
-
-private val DEFAULT_OAEP_SPEC = OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT)
 
 private fun deriveAESKey(pass: String, salt: ByteArray): SecretKey {
     val pbkdfFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
@@ -123,15 +118,15 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
         return newUserReq
     }
 
-    private fun rsaOp(bytes: ByteArray, mode: Int) : ByteArray {
+    private fun rsaOp(bytes: ByteArray, mode: Int, key: Key) : ByteArray {
         val cipher = Cipher.getInstance("RSA/ECB/OAEPPadding");
 
-        cipher.init(mode, keyPair.private, DEFAULT_OAEP_SPEC)
+        cipher.init(mode, key, OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT))
 
         return cipher.doFinal(bytes)
     }
 
-    internal fun decryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.DECRYPT_MODE)
-    internal fun encryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.ENCRYPT_MODE)
+    internal fun decryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.DECRYPT_MODE, keyPair.private)
+    internal fun encryptRsa(bytes: ByteArray) = rsaOp(bytes, Cipher.ENCRYPT_MODE, keyPair.public)
 
 }

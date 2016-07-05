@@ -13,17 +13,28 @@
 package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkProto.*
+import io.grpc.StatusRuntimeException
 
-open class UplinkException internal constructor(msg: String) : Exception(msg)
-class UnknownErrcodeException internal constructor(errcode: Int) : UplinkException("unknown errcode $errcode")
-class AlreadyInvitedException internal constructor() : UplinkException("user already invited to the given conversation")
-class EmptyConvException internal constructor() : UplinkException("empty conversation")
-class NameAlreadyTakenException internal constructor() : UplinkException("username already taken")
-class NoConvException internal constructor() : UplinkException("no such conversation")
-class NoUserException internal constructor() : UplinkException("no such user")
-class NotInvitedException internal constructor() : UplinkException("user not invited to the given conversation")
-class NotMemberException internal constructor() : UplinkException("user not member of the given conversation")
-class SelfInviteException internal constructor() : UplinkException("self invite is not allowed")
-class ServerFaultException internal constructor() : UplinkException("server error")
-class BrokeProtoException internal constructor() : UplinkException("protocol broken, please report")
-class AuthFailException internal constructor() : UplinkException("login data rejected")
+internal fun normExc(e: Throwable) : Throwable {
+    val msg = e.message ?: throw e
+
+    return when {
+        msg.contains("EAUTHFAIL") -> AuthFailException(e)
+        msg.contains("ESERVERFAULT") -> ServerFaultException(e)
+        else -> e
+    }
+}
+
+open class UplinkException internal constructor(msg: String, t : Throwable = Throwable()) : Exception(msg, t)
+class UnknownErrcodeException internal constructor(errcode: Int, t : Throwable = Throwable()) : UplinkException("unknown errcode $errcode", t)
+class AlreadyInvitedException internal constructor(t : Throwable = Throwable()) : UplinkException("user already invited to the given conversation", t)
+class EmptyConvException internal constructor(t : Throwable = Throwable()) : UplinkException("empty conversation", t)
+class NameAlreadyTakenException internal constructor(t : Throwable = Throwable()) : UplinkException("username already taken", t)
+class NoConvException internal constructor(t : Throwable = Throwable()) : UplinkException("no such conversation", t)
+class NoUserException internal constructor(t : Throwable = Throwable()) : UplinkException("no such user", t)
+class NotInvitedException internal constructor(t : Throwable = Throwable()) : UplinkException("user not invited to the given conversation", t)
+class NotMemberException internal constructor(t : Throwable = Throwable()) : UplinkException("user not member of the given conversation", t)
+class SelfInviteException internal constructor(t : Throwable = Throwable()) : UplinkException("self invite is not allowed", t)
+class ServerFaultException internal constructor(t : Throwable = Throwable()) : UplinkException("server error", t)
+class BrokeProtoException internal constructor(t : Throwable = Throwable()) : UplinkException("protocol broken, please report", t)
+class AuthFailException internal constructor(t : Throwable = Throwable()) : UplinkException("login data rejected", t)

@@ -20,8 +20,12 @@ import com.github.mcilloni.uplink.nano.UplinkProto
 import com.google.common.util.concurrent.SettableFuture
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
+import io.grpc.StatusRuntimeException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
+import java.math.BigInteger
+import java.security.MessageDigest
+import java.util.concurrent.ExecutionException
 
 internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlockingStub) {
     var asyncStub = astub
@@ -101,8 +105,9 @@ private class LoginHandler(val futureInfo: SettableFuture<Step1Result>, val futu
 
 }
 
-fun login(url: String, port: Int, userName: String, authPass: String, keyPass: String) : UplinkConnection {
+fun login(url: String, port: Int, userName: String, authPass: String, keyPass: String) = try {
     val stubs = connect(url, port)
+
 
     val futureInfo = SettableFuture.create<Step1Result>()
     val futureSession = SettableFuture.create<Session>()
@@ -123,6 +128,10 @@ fun login(url: String, port: Int, userName: String, authPass: String, keyPass: S
 
     val user = UplinkUser.fromServerInfo(userName, keyPass, info)
 
+    val d = MessageDigest.getInstance("sha-256")
+    d.update(user.keyPair.private.encoded)
+    println("dec_priv_hash = ${BigInteger(d.digest()).toString(16)}")
+
     val decrToken = user.decryptRsa(challenge.token)
 
     req.step2 = with(UplinkProto.Challenge()) {
@@ -135,10 +144,12 @@ fun login(url: String, port: Int, userName: String, authPass: String, keyPass: S
 
     val session = futureSession.get()
 
-    return UplinkConnection(stubs, session, user)
+    UplinkConnection(stubs, session, user)
+} catch (e: ExecutionException) {
+    throw normExc(e.cause ?: throw e)
 }
 
-fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: String) : UplinkConnection {
+fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: String) = try {
     val stubs = connect(url, port)
 
     val existsReq = UplinkProto.Username()
@@ -152,15 +163,21 @@ fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: Str
     val user = UplinkUser.generateUser(name, keyPass)
     val resp = stubs.blockingStub.newUser(user.toNewUserReq(authPass))
 
-    stubs.setSessionInfo(resp.sessionInfo.uid, resp.sessionInfo.sessionId)
-
-    return UplinkConnection(stubs, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
+    UplinkConnection(stubs, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
+} catch (e: ExecutionException) {
+    throw normExc(e.cause ?: throw e)
 }
 
-class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, private val user: UplinkUser) {
-    fun ping() : Boolean {
-        val resp = stubs.blockingStub.ping(UplinkProto.Empty())
+class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, internal val user: UplinkUser) {
+    init {
+        stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
+    }
 
-        return resp.success
+    fun ping() : Boolean {
+        return try {
+            stubs.blockingStub.ping(UplinkProto.Empty())
+        } catch (e: ExecutionException) {
+            throw normExc(e.cause ?: throw e)
+        }.success
     }
 }
