@@ -10,24 +10,20 @@
  *
  */
 
-import com.github.mcilloni.uplink.UplinkConnection
-import com.github.mcilloni.uplink.login
-import com.github.mcilloni.uplink.newUser
+import com.github.mcilloni.uplink.*
 import org.junit.Test as test
 import org.junit.Assert.*
 import org.junit.FixMethodOrder
 import org.junit.runners.MethodSorters
 import java.math.BigInteger
+import java.security.KeyPair
 import java.security.MessageDigest
 import java.util.*
 
 const val URL = "localhost"
 const val PORT = 4444
-const val N_USERS = 1
 
 data class UInfo(val name: String = genRandStr(), val authPass: String = genRandStr(), val keyPass: String = genRandStr())
-
-val users = (1..N_USERS).map { UInfo() }
 
 private const val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -44,33 +40,38 @@ fun genRandStr(): String {
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UplinkTests {
-    var conn: UplinkConnection? = null
+    companion object {
+        var conn: UplinkConnection? = null
+        val uinfo = UInfo()
+        var sessInfo: Session? = null
+        var keyPair: KeyPair? = null
+    }
 
     @test fun testANewUser() {
-        for (uinfo in users) {
-            println("new $uinfo")
+        println("new $uinfo")
 
-            val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+        val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
 
-            assert(conn.ping())
-
-            println(conn.sessInfo)
-
-            val d = MessageDigest.getInstance("sha-256")
-            d.update(conn.user.keyPair.private.encoded)
-            println("priv_hash = ${BigInteger(d.digest()).toString(16)}")
-        }
+        assert(conn.ping())
     }
 
     @test fun testBLogin() {
-        for (uinfo in users) {
-            println("login as $uinfo")
+        println("login as $uinfo")
 
-            conn = login(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+        conn = login(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
 
-            assert(conn?.ping() == true)
+        assert(conn?.ping() == true)
 
-            println(conn?.sessInfo)
-        }
+        sessInfo = conn?.sessInfo
+        println("got session $sessInfo")
+        keyPair = conn?.keyPair
+    }
+
+    @test fun testCResume() {
+        println("resuming session $sessInfo")
+
+        conn = resumeSession(URL, PORT, uinfo.name, keyPair!!, sessInfo!!)
+
+        assert(conn?.ping() == true)
     }
 }

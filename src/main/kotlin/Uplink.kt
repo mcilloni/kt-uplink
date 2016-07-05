@@ -24,6 +24,7 @@ import io.grpc.StatusRuntimeException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
 import java.math.BigInteger
+import java.security.KeyPair
 import java.security.MessageDigest
 import java.util.concurrent.ExecutionException
 
@@ -128,10 +129,6 @@ fun login(url: String, port: Int, userName: String, authPass: String, keyPass: S
 
     val user = UplinkUser.fromServerInfo(userName, keyPass, info)
 
-    val d = MessageDigest.getInstance("sha-256")
-    d.update(user.keyPair.private.encoded)
-    println("dec_priv_hash = ${BigInteger(d.digest()).toString(16)}")
-
     val decrToken = user.decryptRsa(challenge.token)
 
     req.step2 = with(UplinkProto.Challenge()) {
@@ -160,15 +157,25 @@ fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: Str
         throw NameAlreadyTakenException()
     }
 
-    val user = UplinkUser.generateUser(name, keyPass)
-    val resp = stubs.blockingStub.newUser(user.toNewUserReq(authPass))
+    val (user, newUserReq) = UplinkUser.generateUser(name, authPass, keyPass)
+    val resp = stubs.blockingStub.newUser(newUserReq)
 
     UplinkConnection(stubs, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
 }
 
+fun resumeSession(url: String, port: Int, name: String, keyPair: KeyPair, sessInfo: Session) = try {
+    val stubs = connect(url, port)
+
+    UplinkConnection(stubs, sessInfo, UplinkUser.fromExistingSession(name, keyPair))
+} catch (e: ExecutionException) {
+    throw normExc(e.cause ?: throw e)
+}
+
 class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, internal val user: UplinkUser) {
+    val keyPair by lazy { user.keyPair }
+
     init {
         stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
     }

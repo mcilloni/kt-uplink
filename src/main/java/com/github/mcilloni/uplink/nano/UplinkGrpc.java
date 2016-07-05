@@ -85,20 +85,6 @@ public class UplinkGrpc {
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_PING))
           );
-  private static final int ARG_IN_METHOD_RESUME = 8;
-  private static final int ARG_OUT_METHOD_RESUME = 9;
-  @io.grpc.ExperimentalApi
-  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo,
-      com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> METHOD_RESUME =
-      io.grpc.MethodDescriptor.create(
-          io.grpc.MethodDescriptor.MethodType.UNARY,
-          generateFullMethodName(
-              "protodef.Uplink", "Resume"),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>(ARG_IN_METHOD_RESUME)),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_RESUME))
-          );
 
   private static final class NanoFactory<T extends com.google.protobuf.nano.MessageNano>
       implements io.grpc.protobuf.nano.MessageNanoFactory<T> {
@@ -134,12 +120,6 @@ public class UplinkGrpc {
         o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
         break;
       case ARG_OUT_METHOD_PING:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
-        break;
-      case ARG_IN_METHOD_RESUME:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
-        break;
-      case ARG_OUT_METHOD_RESUME:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
         break;
       default:
@@ -197,11 +177,6 @@ public class UplinkGrpc {
      */
     public void ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver);
-
-    /**
-     */
-    public void resume(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver);
   }
 
   @io.grpc.ExperimentalApi
@@ -231,12 +206,6 @@ public class UplinkGrpc {
       asyncUnimplementedUnaryCall(METHOD_PING, responseObserver);
     }
 
-    @java.lang.Override
-    public void resume(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
-      asyncUnimplementedUnaryCall(METHOD_RESUME, responseObserver);
-    }
-
     @java.lang.Override public io.grpc.ServerServiceDefinition bindService() {
       return UplinkGrpc.bindService(this);
     }
@@ -257,10 +226,6 @@ public class UplinkGrpc {
     /**
      */
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
-
-    /**
-     */
-    public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp resume(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request);
   }
 
   /**
@@ -281,11 +246,6 @@ public class UplinkGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> ping(
         com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> resume(
-        com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request);
   }
 
   public static class UplinkStub extends io.grpc.stub.AbstractStub<UplinkStub>
@@ -332,13 +292,6 @@ public class UplinkGrpc {
       asyncUnaryCall(
           getChannel().newCall(METHOD_PING, getCallOptions()), request, responseObserver);
     }
-
-    @java.lang.Override
-    public void resume(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(METHOD_RESUME, getCallOptions()), request, responseObserver);
-    }
   }
 
   public static class UplinkBlockingStub extends io.grpc.stub.AbstractStub<UplinkBlockingStub>
@@ -374,12 +327,6 @@ public class UplinkGrpc {
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
       return blockingUnaryCall(
           getChannel(), METHOD_PING, getCallOptions(), request);
-    }
-
-    @java.lang.Override
-    public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp resume(com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request) {
-      return blockingUnaryCall(
-          getChannel(), METHOD_RESUME, getCallOptions(), request);
     }
   }
 
@@ -420,20 +367,12 @@ public class UplinkGrpc {
       return futureUnaryCall(
           getChannel().newCall(METHOD_PING, getCallOptions()), request);
     }
-
-    @java.lang.Override
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> resume(
-        com.github.mcilloni.uplink.nano.UplinkProto.SessInfo request) {
-      return futureUnaryCall(
-          getChannel().newCall(METHOD_RESUME, getCallOptions()), request);
-    }
   }
 
   private static final int METHODID_EXISTS = 0;
   private static final int METHODID_NEW_USER = 1;
   private static final int METHODID_PING = 2;
-  private static final int METHODID_RESUME = 3;
-  private static final int METHODID_LOGIN_EXCHANGE = 4;
+  private static final int METHODID_LOGIN_EXCHANGE = 3;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -462,10 +401,6 @@ public class UplinkGrpc {
           break;
         case METHODID_PING:
           serviceImpl.ping((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
-              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
-          break;
-        case METHODID_RESUME:
-          serviceImpl.resume((com.github.mcilloni.uplink.nano.UplinkProto.SessInfo) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
           break;
         default:
@@ -518,13 +453,6 @@ public class UplinkGrpc {
               com.github.mcilloni.uplink.nano.UplinkProto.Empty,
               com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
                 serviceImpl, METHODID_PING)))
-        .addMethod(
-          METHOD_RESUME,
-          asyncUnaryCall(
-            new MethodHandlers<
-              com.github.mcilloni.uplink.nano.UplinkProto.SessInfo,
-              com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
-                serviceImpl, METHODID_RESUME)))
         .build();
   }
 }

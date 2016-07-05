@@ -68,10 +68,11 @@ private fun SecretKey.decipherGCM(encMsg: ByteArray, aad: ByteArray, iv: ByteArr
     return msg
 }
 
-class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val keyIv: ByteArray,
-                                     val keySalt: ByteArray, val encPrivKey: ByteArray) {
+class UplinkUser private constructor(val name: String, val keyPair: KeyPair) {
 
-    companion object Factory {
+    internal companion object Factory {
+        fun fromExistingSession(name: String, keyPair: KeyPair) = UplinkUser(name, keyPair)
+
         fun fromServerInfo(name: String, keyPass: String, userInfo: UplinkProto.UserInfo): UplinkUser {
             val mainKey = deriveAESKey(keyPass, userInfo.keySalt)
 
@@ -84,10 +85,10 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
 
             val keyPair = KeyPair(publicKey, privateKey)
 
-            return UplinkUser(name, keyPair, userInfo.keyIv, userInfo.keySalt, userInfo.encPrivateKey)
+            return UplinkUser(name, keyPair)
         }
 
-        fun generateUser(name: String, pass: String): UplinkUser {
+        fun generateUser(name: String, authPass: String, keyPass: String): Pair<UplinkUser, UplinkProto.NewUserReq> {
             val keyPairGen = KeyPairGenerator.getInstance("RSA")
             keyPairGen.initialize(RSA_KEY_STRENGHT)
             val keyPair = keyPairGen.genKeyPair()
@@ -95,27 +96,23 @@ class UplinkUser private constructor(val name: String, val keyPair: KeyPair, val
             val keySalt = ByteArray(32)
             SecureRandom().nextBytes(keySalt)
 
-            val mainKey = deriveAESKey(pass, keySalt)
+            val mainKey = deriveAESKey(keyPass, keySalt)
 
             val (encPrivKey, keyIv) = mainKey.cipherGCM(keyPair.private.encoded, name.toByteArray())
 
-            return UplinkUser(name, keyPair, keyIv, keySalt, encPrivKey)
+            val newUserReq = with(UplinkProto.NewUserReq()) {
+                this.name = name
+                this.pass = authPass
+                this.publicKey = keyPair.public.encoded
+                this.encPrivateKey = encPrivKey
+                this.keyIv = keyIv
+                this.keySalt = keySalt
+
+                this
+            }
+
+            return Pair(UplinkUser(name, keyPair), newUserReq)
         }
-    }
-
-    fun toNewUserReq(authPass: String): UplinkProto.NewUserReq {
-        val newUserReq = UplinkProto.NewUserReq()
-
-        with(newUserReq) {
-            name = this@UplinkUser.name
-            pass = authPass
-            publicKey = keyPair.public.encoded
-            encPrivateKey = this@UplinkUser.encPrivKey
-            keyIv = this@UplinkUser.keyIv
-            keySalt = this@UplinkUser.keySalt
-        }
-
-        return newUserReq
     }
 
     private fun rsaOp(bytes: ByteArray, mode: Int, key: Key) : ByteArray {
