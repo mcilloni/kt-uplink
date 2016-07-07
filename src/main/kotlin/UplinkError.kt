@@ -21,6 +21,9 @@ internal fun normExc(e: Throwable) : Throwable {
     return when {
         msg.contains("EAUTHFAIL") -> AuthFailException(e)
         msg.contains("ESERVERFAULT") -> ServerFaultException(e)
+        msg.contains("ERESERVEDUSER") -> ReservedUserException(e)
+        msg.contains("EALREADYFRIENDS") -> AlreadyFriendsException(e)
+        msg.contains("ERRNOREQUEST") -> NoFriendshipRequestException(e)
         else -> e
     }
 }
@@ -28,9 +31,11 @@ internal fun normExc(e: Throwable) : Throwable {
 open class UplinkException internal constructor(msg: String, t : Throwable = Throwable()) : Exception(msg, t)
 class UnknownErrcodeException internal constructor(errcode: Int, t : Throwable = Throwable()) : UplinkException("unknown errcode $errcode", t)
 class AlreadyInvitedException internal constructor(t : Throwable = Throwable()) : UplinkException("user already invited to the given conversation", t)
+class AlreadyFriendsException internal constructor(t : Throwable = Throwable()) : UplinkException("already friend with the given user", t)
 class EmptyConvException internal constructor(t : Throwable = Throwable()) : UplinkException("empty conversation", t)
 class NameAlreadyTakenException internal constructor(t : Throwable = Throwable()) : UplinkException("username already taken", t)
 class NoConvException internal constructor(t : Throwable = Throwable()) : UplinkException("no such conversation", t)
+class NoFriendshipRequestException internal constructor(t : Throwable = Throwable()) : UplinkException("no friendship request from this user", t)
 class NoUserException internal constructor(t : Throwable = Throwable()) : UplinkException("no such user", t)
 class NotInvitedException internal constructor(t : Throwable = Throwable()) : UplinkException("user not invited to the given conversation", t)
 class NotMemberException internal constructor(t : Throwable = Throwable()) : UplinkException("user not member of the given conversation", t)
@@ -38,3 +43,4 @@ class SelfInviteException internal constructor(t : Throwable = Throwable()) : Up
 class ServerFaultException internal constructor(t : Throwable = Throwable()) : UplinkException("server error", t)
 class BrokeProtoException internal constructor(t : Throwable = Throwable()) : UplinkException("protocol broken, please report", t)
 class AuthFailException internal constructor(t : Throwable = Throwable()) : UplinkException("login data rejected", t)
+class ReservedUserException internal constructor(t : Throwable = Throwable()) : UplinkException("trying to access data of a reserved user", t)

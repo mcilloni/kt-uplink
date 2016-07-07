@@ -433,8 +433,10 @@ public interface UplinkProto {
 
     // enum Type
     public static final int MESSAGE = 0;
-    public static final int FRIENDSHIP = 1;
-    public static final int INVITE = 2;
+    public static final int FRIENDSHIP_REQ = 1;
+    public static final int FRIENDSHIP_ACC = 2;
+    public static final int JOIN_REQ = 3;
+    public static final int JOIN_ACC = 4;
 
     private static volatile Notification[] _emptyArray;
     public static Notification[] emptyArray() {
@@ -453,8 +455,8 @@ public interface UplinkProto {
     // optional .protodef.Notification.Type type = 1;
     public int type;
 
-    // optional string sender_name = 2;
-    public java.lang.String senderName;
+    // optional string user_name = 2;
+    public java.lang.String userName;
 
     // optional int64 conv_id = 3;
     public long convId;
@@ -468,7 +470,7 @@ public interface UplinkProto {
 
     public Notification clear() {
       type = com.github.mcilloni.uplink.nano.UplinkProto.Notification.MESSAGE;
-      senderName = "";
+      userName = "";
       convId = 0L;
       body = "";
       cachedSize = -1;
@@ -481,8 +483,8 @@ public interface UplinkProto {
       if (this.type != com.github.mcilloni.uplink.nano.UplinkProto.Notification.MESSAGE) {
         output.writeInt32(1, this.type);
       }
-      if (!this.senderName.equals("")) {
-        output.writeString(2, this.senderName);
+      if (!this.userName.equals("")) {
+        output.writeString(2, this.userName);
       }
       if (this.convId != 0L) {
         output.writeInt64(3, this.convId);
@@ -500,9 +502,9 @@ public interface UplinkProto {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
           .computeInt32Size(1, this.type);
       }
-      if (!this.senderName.equals("")) {
+      if (!this.userName.equals("")) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(2, this.senderName);
+            .computeStringSize(2, this.userName);
       }
       if (this.convId != 0L) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
@@ -534,15 +536,17 @@ public interface UplinkProto {
             int value = input.readInt32();
             switch (value) {
               case com.github.mcilloni.uplink.nano.UplinkProto.Notification.MESSAGE:
-              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.FRIENDSHIP:
-              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.INVITE:
+              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.FRIENDSHIP_REQ:
+              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.FRIENDSHIP_ACC:
+              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.JOIN_REQ:
+              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.JOIN_ACC:
                 this.type = value;
                 break;
             }
             break;
           }
           case 18: {
-            this.senderName = input.readString();
+            this.userName = input.readString();
             break;
           }
           case 24: {

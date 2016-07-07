@@ -18,10 +18,8 @@ package com.github.mcilloni.uplink
 import com.github.mcilloni.uplink.nano.UplinkGrpc
 import com.github.mcilloni.uplink.nano.UplinkProto
 import com.github.mcilloni.uplink.nano.UplinkProto.Notification
-import com.google.common.util.concurrent.SettableFuture
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
-import io.grpc.StatusRuntimeException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.ExecutionException
@@ -107,8 +105,10 @@ fun resumeSession(url: String, port: Int, name: String, sessInfo: Session) = try
 
 interface NotificationHandler {
     fun onNewMessage(message: Message)
-    fun onFriendRequest(friendRequest: FriendRequest)
+    fun onFriendRequest(userName: String)
+    fun onNewFriendship(userName: String)
     fun onConversationInvite(conversationInvite: ConversationInvite)
+    fun onNewUserInConversation(userName: String, conv: Conversation)
 }
 
 class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, val username: String) {
@@ -116,35 +116,20 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
         stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
     }
 
-    infix fun subscribe (handl: NotificationHandler) = thread(isDaemon = true) {
-         while (true) {
-            stubs.asyncStub.notifications(UplinkProto.Empty(), object : StreamObserver<UplinkProto.Notification> {
-                override fun onError(t: Throwable?) {}
+    fun acceptFriendshipWith(name: String) = try {
+        stubs.blockingStub.acceptFriendship(with(UplinkProto.Username()) {
+            this.name = name
 
-                override fun onCompleted() {}
+            this
+        })
+    } catch (e: ExecutionException) {
+        throw normExc(e.cause ?: throw e)
+    }
 
-                override fun onNext(value: UplinkProto.Notification?) {
-                    if (value != null) {
-                        with (value) {
-                            when (type) {
-                                Notification.MESSAGE -> {
-
-                                }
-
-                                Notification.INVITE -> {
-                                    handl.onConversationInvite(ConversationInvite(senderName, body, convId))
-                                }
-
-                                Notification.FRIENDSHIP -> {
-                                    handl.onFriendRequest(FriendRequest(senderName))
-                                }
-                            }
-                        }
-                    }
-                }
-
-            })
-        }
+    fun getFriends() = try {
+        stubs.blockingStub.friends(UplinkProto.Empty()).friends
+    } catch (e: ExecutionException) {
+        throw normExc(e.cause ?: throw e)
     }
 
     fun ping() : Boolean {
@@ -153,5 +138,55 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
         } catch (e: ExecutionException) {
             throw normExc(e.cause ?: throw e)
         }.success
+    }
+
+    fun sendFriendshipRequest(user: String) : Boolean = try {
+        stubs.blockingStub.requestFriendship(with(UplinkProto.Username()){
+            name = user
+
+            this
+        }).success
+    } catch (e: ExecutionException) {
+        throw normExc(e.cause ?: throw e)
+    }
+
+    infix fun subscribe (handl: NotificationHandler) : Thread = thread(isDaemon = true) {
+        stubs.asyncStub.notifications(UplinkProto.Empty(), object : StreamObserver<UplinkProto.Notification> {
+            override fun onError(t: Throwable?) {
+                println("ERROR " +  t)
+                this@UplinkConnection subscribe handl // resubscribe the handler
+            }
+
+            override fun onCompleted() {}
+
+            override fun onNext(value: UplinkProto.Notification?) {
+                if (value != null) {
+                    with (value) {
+                        when (type) {
+                            Notification.MESSAGE -> {
+
+                            }
+
+                            Notification.JOIN_REQ -> {
+                                handl.onConversationInvite(ConversationInvite(userName, Conversation(body, convId)))
+                            }
+
+                            Notification.JOIN_ACC -> {
+                                handl.onNewUserInConversation(userName, Conversation(body, convId))
+                            }
+
+                            Notification.FRIENDSHIP_REQ -> {
+                                handl.onFriendRequest(userName)
+                            }
+
+                            Notification.FRIENDSHIP_ACC -> {
+                                handl.onNewFriendship(userName)
+                            }
+                        }
+                    }
+                }
+            }
+
+        })
     }
 }

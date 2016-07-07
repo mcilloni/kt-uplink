@@ -11,11 +11,13 @@
  */
 
 import com.github.mcilloni.uplink.*
+import com.google.common.util.concurrent.SettableFuture
 import org.junit.Test as test
 import org.junit.Assert.*
 import org.junit.FixMethodOrder
 import org.junit.runners.MethodSorters
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 const val URL = "localhost"
 const val PORT = 4444
@@ -43,6 +45,10 @@ class UplinkTests {
 
         // for user 0
         var sessInfo: Session? = null
+
+        var recvFriendReq = SettableFuture.create<Unit>()
+        var friendWith1 = SettableFuture.create<Unit>()
+        var friendWith2 = SettableFuture.create<Unit>()
     }
 
     @test fun testANewUser() {
@@ -86,5 +92,61 @@ class UplinkTests {
         conns[1] = newUser(URL, PORT, uinfo.name, uinfo.authPass)
 
         assert(conns[1]?.ping() == true)
+    }
+
+    @test fun testESetupListeners() {
+        conns[0]?.subscribe(object : NotificationHandler {
+            override fun onNewMessage(message: Message) {}
+
+            override fun onFriendRequest(userName: String) {}
+
+            override fun onNewFriendship(userName: String) {
+                println("1 now friend with $userName")
+
+                friendWith2.set(null)
+            }
+
+            override fun onConversationInvite(conversationInvite: ConversationInvite) {}
+
+            override fun onNewUserInConversation(userName: String, conv: Conversation) {}
+
+        })
+
+        conns[1]?.subscribe(object : NotificationHandler {
+            override fun onNewMessage(message: Message) {}
+
+            override fun onNewUserInConversation(userName: String, conv: Conversation) {}
+
+            override fun onFriendRequest(userName: String) {
+                println("friendship request from $userName")
+
+                recvFriendReq.set(null)
+
+                conns[1]?.acceptFriendshipWith(userName)
+            }
+
+            override fun onNewFriendship(userName: String) {
+                println("2 now friend with $userName")
+
+                friendWith1.set(null)
+            }
+
+            override fun onConversationInvite(conversationInvite: ConversationInvite) {}
+
+        })
+    }
+
+    @test fun testFRequestFriendship() {
+        conns[0]?.sendFriendshipRequest(uinfos[1].name)
+    }
+
+    @test fun testGCheckFriends() {
+        recvFriendReq.get(2, TimeUnit.SECONDS)
+        friendWith1.get(2, TimeUnit.SECONDS)
+        friendWith2.get(2, TimeUnit.SECONDS)
+
+        assert(uinfos[1].name in conns[0]?.getFriends().orEmpty())
+        assert(uinfos[0].name in conns[1]?.getFriends().orEmpty())
+
     }
 }
