@@ -15,15 +15,12 @@ import org.junit.Test as test
 import org.junit.Assert.*
 import org.junit.FixMethodOrder
 import org.junit.runners.MethodSorters
-import java.math.BigInteger
-import java.security.KeyPair
-import java.security.MessageDigest
 import java.util.*
 
 const val URL = "localhost"
 const val PORT = 4444
 
-data class UInfo(val name: String = genRandStr(), val authPass: String = genRandStr(), val keyPass: String = genRandStr())
+data class UInfo(val name: String = genRandStr(), val authPass: String = genRandStr())
 
 private const val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
@@ -41,37 +38,53 @@ fun genRandStr(): String {
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class UplinkTests {
     companion object {
-        var conn: UplinkConnection? = null
-        val uinfo = UInfo()
+        var conns = mutableListOf<UplinkConnection?>(null, null)
+        val uinfos = listOf(UInfo(), UInfo())
+
+        // for user 0
         var sessInfo: Session? = null
-        var keyPair: KeyPair? = null
     }
 
     @test fun testANewUser() {
+        val uinfo = uinfos[0]
+
         println("new $uinfo")
 
-        val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+        val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass)
 
         assert(conn.ping())
     }
 
     @test fun testBLogin() {
+        val uinfo = uinfos[0]
+
         println("login as $uinfo")
 
-        conn = login(URL, PORT, uinfo.name, uinfo.authPass, uinfo.keyPass)
+        val conn = login(URL, PORT, uinfo.name, uinfo.authPass)
 
-        assert(conn?.ping() == true)
+        assert(conn.ping() == true)
 
-        sessInfo = conn?.sessInfo
+        sessInfo = conn.sessInfo
         println("got session $sessInfo")
-        keyPair = conn?.keyPair
     }
 
     @test fun testCResume() {
+        val uinfo = uinfos[0]
+
         println("resuming session $sessInfo")
 
-        conn = resumeSession(URL, PORT, uinfo.name, keyPair!!, sessInfo!!)
+        conns[0] = resumeSession(URL, PORT, uinfo.name, sessInfo!!)
 
-        assert(conn?.ping() == true)
+        assert(conns[0]?.ping() == true)
+    }
+
+    @test fun testDSecondUser() {
+        val uinfo = uinfos[1]
+
+        println("new $uinfo")
+
+        conns[1] = newUser(URL, PORT, uinfo.name, uinfo.authPass)
+
+        assert(conns[1]?.ping() == true)
     }
 }

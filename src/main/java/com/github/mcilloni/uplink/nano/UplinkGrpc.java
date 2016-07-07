@@ -43,36 +43,64 @@ public class UplinkGrpc {
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_EXISTS))
           );
-  private static final int ARG_IN_METHOD_LOGIN_EXCHANGE = 2;
-  private static final int ARG_OUT_METHOD_LOGIN_EXCHANGE = 3;
+  private static final int ARG_IN_METHOD_FRIENDS = 2;
+  private static final int ARG_OUT_METHOD_FRIENDS = 3;
   @io.grpc.ExperimentalApi
-  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq,
-      com.github.mcilloni.uplink.nano.UplinkProto.LoginResp> METHOD_LOGIN_EXCHANGE =
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+      com.github.mcilloni.uplink.nano.UplinkProto.FriendList> METHOD_FRIENDS =
       io.grpc.MethodDescriptor.create(
-          io.grpc.MethodDescriptor.MethodType.BIDI_STREAMING,
+          io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
-              "protodef.Uplink", "LoginExchange"),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq>(ARG_IN_METHOD_LOGIN_EXCHANGE)),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp>(ARG_OUT_METHOD_LOGIN_EXCHANGE))
+              "protodef.Uplink", "Friends"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Empty>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_FRIENDS)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(ARG_OUT_METHOD_FRIENDS))
           );
-  private static final int ARG_IN_METHOD_NEW_USER = 4;
-  private static final int ARG_OUT_METHOD_NEW_USER = 5;
+  private static final int ARG_IN_METHOD_LOGIN = 4;
+  private static final int ARG_OUT_METHOD_LOGIN = 5;
   @io.grpc.ExperimentalApi
-  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq,
-      com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> METHOD_NEW_USER =
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo,
+      com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> METHOD_LOGIN =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.UNARY,
+          generateFullMethodName(
+              "protodef.Uplink", "Login"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo>(ARG_IN_METHOD_LOGIN)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>(ARG_OUT_METHOD_LOGIN))
+          );
+  private static final int ARG_IN_METHOD_NEW_USER = 6;
+  private static final int ARG_OUT_METHOD_NEW_USER = 7;
+  @io.grpc.ExperimentalApi
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo,
+      com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> METHOD_NEW_USER =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
               "protodef.Uplink", "NewUser"),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq>(ARG_IN_METHOD_NEW_USER)),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp>(ARG_OUT_METHOD_NEW_USER))
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo>(ARG_IN_METHOD_NEW_USER)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>(ARG_OUT_METHOD_NEW_USER))
           );
-  private static final int ARG_IN_METHOD_PING = 6;
-  private static final int ARG_OUT_METHOD_PING = 7;
+  private static final int ARG_IN_METHOD_NOTIFICATIONS = 8;
+  private static final int ARG_OUT_METHOD_NOTIFICATIONS = 9;
+  @io.grpc.ExperimentalApi
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+      com.github.mcilloni.uplink.nano.UplinkProto.Notification> METHOD_NOTIFICATIONS =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING,
+          generateFullMethodName(
+              "protodef.Uplink", "Notifications"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Empty>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_NOTIFICATIONS)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Notification>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Notification>(ARG_OUT_METHOD_NOTIFICATIONS))
+          );
+  private static final int ARG_IN_METHOD_PING = 10;
+  private static final int ARG_OUT_METHOD_PING = 11;
   @io.grpc.ExperimentalApi
   public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
       com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> METHOD_PING =
@@ -104,17 +132,29 @@ public class UplinkGrpc {
       case ARG_OUT_METHOD_EXISTS:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
         break;
-      case ARG_IN_METHOD_LOGIN_EXCHANGE:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.LoginReq();
+      case ARG_IN_METHOD_FRIENDS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
         break;
-      case ARG_OUT_METHOD_LOGIN_EXCHANGE:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.LoginResp();
+      case ARG_OUT_METHOD_FRIENDS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.FriendList();
+        break;
+      case ARG_IN_METHOD_LOGIN:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo();
+        break;
+      case ARG_OUT_METHOD_LOGIN:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
         break;
       case ARG_IN_METHOD_NEW_USER:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq();
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo();
         break;
       case ARG_OUT_METHOD_NEW_USER:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp();
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.SessInfo();
+        break;
+      case ARG_IN_METHOD_NOTIFICATIONS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
+        break;
+      case ARG_OUT_METHOD_NOTIFICATIONS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.Notification();
         break;
       case ARG_IN_METHOD_PING:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
@@ -165,13 +205,23 @@ public class UplinkGrpc {
 
     /**
      */
-    public io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq> loginExchange(
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp> responseObserver);
+    public void friends(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver);
 
     /**
      */
-    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> responseObserver);
+    public void login(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver);
+
+    /**
+     */
+    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver);
+
+    /**
+     */
+    public void notifications(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.Notification> responseObserver);
 
     /**
      */
@@ -189,15 +239,27 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq> loginExchange(
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp> responseObserver) {
-      return asyncUnimplementedStreamingCall(METHOD_LOGIN_EXCHANGE, responseObserver);
+    public void friends(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_FRIENDS, responseObserver);
     }
 
     @java.lang.Override
-    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> responseObserver) {
+    public void login(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_LOGIN, responseObserver);
+    }
+
+    @java.lang.Override
+    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_NEW_USER, responseObserver);
+    }
+
+    @java.lang.Override
+    public void notifications(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.Notification> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_NOTIFICATIONS, responseObserver);
     }
 
     @java.lang.Override
@@ -221,7 +283,20 @@ public class UplinkGrpc {
 
     /**
      */
-    public com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp newUser(com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request);
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList friends(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
+
+    /**
+     */
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo login(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request);
+
+    /**
+     */
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo newUser(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request);
+
+    /**
+     */
+    public java.util.Iterator<com.github.mcilloni.uplink.nano.UplinkProto.Notification> notifications(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
 
     /**
      */
@@ -239,8 +314,18 @@ public class UplinkGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> newUser(
-        com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request);
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> friends(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> login(
+        com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request);
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> newUser(
+        com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request);
 
     /**
      */
@@ -273,17 +358,31 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginReq> loginExchange(
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp> responseObserver) {
-      return asyncBidiStreamingCall(
-          getChannel().newCall(METHOD_LOGIN_EXCHANGE, getCallOptions()), responseObserver);
+    public void friends(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_FRIENDS, getCallOptions()), request, responseObserver);
     }
 
     @java.lang.Override
-    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> responseObserver) {
+    public void login(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_LOGIN, getCallOptions()), request, responseObserver);
+    }
+
+    @java.lang.Override
+    public void newUser(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_NEW_USER, getCallOptions()), request, responseObserver);
+    }
+
+    @java.lang.Override
+    public void notifications(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.Notification> responseObserver) {
+      asyncServerStreamingCall(
+          getChannel().newCall(METHOD_NOTIFICATIONS, getCallOptions()), request, responseObserver);
     }
 
     @java.lang.Override
@@ -318,9 +417,28 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp newUser(com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request) {
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList friends(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_FRIENDS, getCallOptions(), request);
+    }
+
+    @java.lang.Override
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo login(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_LOGIN, getCallOptions(), request);
+    }
+
+    @java.lang.Override
+    public com.github.mcilloni.uplink.nano.UplinkProto.SessInfo newUser(com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request) {
       return blockingUnaryCall(
           getChannel(), METHOD_NEW_USER, getCallOptions(), request);
+    }
+
+    @java.lang.Override
+    public java.util.Iterator<com.github.mcilloni.uplink.nano.UplinkProto.Notification> notifications(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return blockingServerStreamingCall(
+          getChannel(), METHOD_NOTIFICATIONS, getCallOptions(), request);
     }
 
     @java.lang.Override
@@ -355,8 +473,22 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp> newUser(
-        com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq request) {
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> friends(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_FRIENDS, getCallOptions()), request);
+    }
+
+    @java.lang.Override
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> login(
+        com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_LOGIN, getCallOptions()), request);
+    }
+
+    @java.lang.Override
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo> newUser(
+        com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_NEW_USER, getCallOptions()), request);
     }
@@ -370,9 +502,11 @@ public class UplinkGrpc {
   }
 
   private static final int METHODID_EXISTS = 0;
-  private static final int METHODID_NEW_USER = 1;
-  private static final int METHODID_PING = 2;
-  private static final int METHODID_LOGIN_EXCHANGE = 3;
+  private static final int METHODID_FRIENDS = 1;
+  private static final int METHODID_LOGIN = 2;
+  private static final int METHODID_NEW_USER = 3;
+  private static final int METHODID_NOTIFICATIONS = 4;
+  private static final int METHODID_PING = 5;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -395,9 +529,21 @@ public class UplinkGrpc {
           serviceImpl.exists((com.github.mcilloni.uplink.nano.UplinkProto.Username) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
           break;
+        case METHODID_FRIENDS:
+          serviceImpl.friends((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>) responseObserver);
+          break;
+        case METHODID_LOGIN:
+          serviceImpl.login((com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>) responseObserver);
+          break;
         case METHODID_NEW_USER:
-          serviceImpl.newUser((com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq) request,
-              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp>) responseObserver);
+          serviceImpl.newUser((com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>) responseObserver);
+          break;
+        case METHODID_NOTIFICATIONS:
+          serviceImpl.notifications((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.Notification>) responseObserver);
           break;
         case METHODID_PING:
           serviceImpl.ping((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
@@ -413,9 +559,6 @@ public class UplinkGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_LOGIN_EXCHANGE:
-          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.loginExchange(
-              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.LoginResp>) responseObserver);
         default:
           throw new AssertionError();
       }
@@ -433,19 +576,33 @@ public class UplinkGrpc {
               com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
                 serviceImpl, METHODID_EXISTS)))
         .addMethod(
-          METHOD_LOGIN_EXCHANGE,
-          asyncBidiStreamingCall(
+          METHOD_FRIENDS,
+          asyncUnaryCall(
             new MethodHandlers<
-              com.github.mcilloni.uplink.nano.UplinkProto.LoginReq,
-              com.github.mcilloni.uplink.nano.UplinkProto.LoginResp>(
-                serviceImpl, METHODID_LOGIN_EXCHANGE)))
+              com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+              com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(
+                serviceImpl, METHODID_FRIENDS)))
+        .addMethod(
+          METHOD_LOGIN,
+          asyncUnaryCall(
+            new MethodHandlers<
+              com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo,
+              com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>(
+                serviceImpl, METHODID_LOGIN)))
         .addMethod(
           METHOD_NEW_USER,
           asyncUnaryCall(
             new MethodHandlers<
-              com.github.mcilloni.uplink.nano.UplinkProto.NewUserReq,
-              com.github.mcilloni.uplink.nano.UplinkProto.NewUserResp>(
+              com.github.mcilloni.uplink.nano.UplinkProto.AuthInfo,
+              com.github.mcilloni.uplink.nano.UplinkProto.SessInfo>(
                 serviceImpl, METHODID_NEW_USER)))
+        .addMethod(
+          METHOD_NOTIFICATIONS,
+          asyncServerStreamingCall(
+            new MethodHandlers<
+              com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+              com.github.mcilloni.uplink.nano.UplinkProto.Notification>(
+                serviceImpl, METHODID_NOTIFICATIONS)))
         .addMethod(
           METHOD_PING,
           asyncUnaryCall(

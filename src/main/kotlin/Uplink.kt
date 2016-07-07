@@ -17,16 +17,15 @@ package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkGrpc
 import com.github.mcilloni.uplink.nano.UplinkProto
+import com.github.mcilloni.uplink.nano.UplinkProto.Notification
 import com.google.common.util.concurrent.SettableFuture
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
 import io.grpc.StatusRuntimeException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
-import java.math.BigInteger
-import java.security.KeyPair
-import java.security.MessageDigest
 import java.util.concurrent.ExecutionException
+import kotlin.concurrent.thread
 
 internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlockingStub) {
     var asyncStub = astub
@@ -55,129 +54,97 @@ private fun connect(url: String, port: Int) : Stubs {
 }
 
 data class Session(val uid: Long, val sessid: String)
-data class Step1Result(val userInfo: UplinkProto.UserInfo, val challenge: UplinkProto.Challenge)
 
-private class LoginHandler(val futureInfo: SettableFuture<Step1Result>, val futureSess: SettableFuture<Session>) : StreamObserver<UplinkProto.LoginResp> {
-    private enum class State {
-        STEP1,
-        STEP2,
-        END
-    }
-
-    private var state = State.STEP1
-
-    override fun onCompleted() {
-        if (state != State.END) {
-            throw BrokeProtoException()
-        }
-    }
-
-    override fun onError(t: Throwable?) {
-        futureInfo.setException(t)
-        futureSess.setException(t)
-    }
-
-    override fun onNext(value: UplinkProto.LoginResp?) {
-        val step1 = value?.step1
-        val step2 = value?.step2
-
-        when {
-            step1 != null -> {
-                if (state != State.STEP1) {
-                    throw BrokeProtoException()
-                }
-
-                futureInfo.set(Step1Result(step1.userInfo, step1.challenge))
-
-                state = State.STEP2
-            }
-
-            step2 != null -> {
-                if (state != State.STEP2) {
-                    throw BrokeProtoException()
-                }
-
-                futureSess.set(Session(step2.uid, step2.sessionId))
-
-                state = State.END
-            }
-        }
-    }
-
-}
-
-fun login(url: String, port: Int, userName: String, authPass: String, keyPass: String) = try {
+fun login(url: String, port: Int, userName: String, authPass: String) = try {
     val stubs = connect(url, port)
 
-
-    val futureInfo = SettableFuture.create<Step1Result>()
-    val futureSession = SettableFuture.create<Session>()
-
-    val reqObserver = stubs.asyncStub.loginExchange(LoginHandler(futureInfo, futureSession))
-
-    val req = UplinkProto.LoginReq()
-    req.step1 = with(UplinkProto.AuthInfo()) {
+    val info = stubs.blockingStub.login(with(UplinkProto.AuthInfo()) {
         name = userName
         pass = authPass
 
         this
-    }
+    })
 
-    reqObserver.onNext(req)
+    val session = Session(info.uid, info.sessionId)
 
-    val (info, challenge) = futureInfo.get()
-
-    val user = UplinkUser.fromServerInfo(userName, keyPass, info)
-
-    val decrToken = user.decryptRsa(challenge.token)
-
-    req.step2 = with(UplinkProto.Challenge()) {
-        token = decrToken
-
-        this
-    }
-
-    reqObserver.onNext(req)
-
-    val session = futureSession.get()
-
-    UplinkConnection(stubs, session, user)
+    UplinkConnection(stubs, session, userName)
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
 }
 
-fun newUser(url: String, port: Int, name: String, authPass: String, keyPass: String) = try {
+fun newUser(url: String, port: Int, userName: String, authPass: String) = try {
     val stubs = connect(url, port)
 
-    val existsReq = UplinkProto.Username()
-    existsReq.name = name
-    val existsResp = stubs.blockingStub.exists(existsReq)
+    val existsResp = stubs.blockingStub.exists(with(UplinkProto.Username()) {
+        name = userName
+
+        this
+    })
 
     if (existsResp.success) {
         throw NameAlreadyTakenException()
     }
 
-    val (user, newUserReq) = UplinkUser.generateUser(name, authPass, keyPass)
-    val resp = stubs.blockingStub.newUser(newUserReq)
+    val resp = stubs.blockingStub.newUser(with(UplinkProto.AuthInfo()) {
+        name = userName
+        pass = authPass
 
-    UplinkConnection(stubs, Session(resp.sessionInfo.uid, resp.sessionInfo.sessionId), user)
+        this
+    })
+
+    UplinkConnection(stubs, Session(resp.uid, resp.sessionId), userName)
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
 }
 
-fun resumeSession(url: String, port: Int, name: String, keyPair: KeyPair, sessInfo: Session) = try {
+fun resumeSession(url: String, port: Int, name: String, sessInfo: Session) = try {
     val stubs = connect(url, port)
 
-    UplinkConnection(stubs, sessInfo, UplinkUser.fromExistingSession(name, keyPair))
+    UplinkConnection(stubs, sessInfo, name)
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
 }
 
-class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, internal val user: UplinkUser) {
-    val keyPair by lazy { user.keyPair }
+interface NotificationHandler {
+    fun onNewMessage(message: Message)
+    fun onFriendRequest(friendRequest: FriendRequest)
+    fun onConversationInvite(conversationInvite: ConversationInvite)
+}
 
+class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, val username: String) {
     init {
         stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
+    }
+
+    infix fun subscribe (handl: NotificationHandler) = thread(isDaemon = true) {
+         while (true) {
+            stubs.asyncStub.notifications(UplinkProto.Empty(), object : StreamObserver<UplinkProto.Notification> {
+                override fun onError(t: Throwable?) {}
+
+                override fun onCompleted() {}
+
+                override fun onNext(value: UplinkProto.Notification?) {
+                    if (value != null) {
+                        with (value) {
+                            when (type) {
+                                Notification.MESSAGE -> {
+
+                                }
+
+                                Notification.INVITE -> {
+                                    handl.onConversationInvite(ConversationInvite(senderName, body, convId))
+                                }
+
+                                Notification.FRIENDSHIP -> {
+                                    handl.onFriendRequest(FriendRequest(senderName))
+                                }
+                            }
+                        }
+                    }
+                }
+
+            })
+        }
     }
 
     fun ping() : Boolean {
