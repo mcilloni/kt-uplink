@@ -113,22 +113,8 @@ public class UplinkGrpc {
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Notification>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Notification>(ARG_OUT_METHOD_NOTIFICATIONS))
           );
-  private static final int ARG_IN_METHOD_PENDING_FRIENDSHIPS = 12;
-  private static final int ARG_OUT_METHOD_PENDING_FRIENDSHIPS = 13;
-  @io.grpc.ExperimentalApi
-  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
-      com.github.mcilloni.uplink.nano.UplinkProto.FriendList> METHOD_PENDING_FRIENDSHIPS =
-      io.grpc.MethodDescriptor.create(
-          io.grpc.MethodDescriptor.MethodType.UNARY,
-          generateFullMethodName(
-              "protodef.Uplink", "PendingFriendships"),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Empty>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_PENDING_FRIENDSHIPS)),
-          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>marshaller(
-              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(ARG_OUT_METHOD_PENDING_FRIENDSHIPS))
-          );
-  private static final int ARG_IN_METHOD_PING = 14;
-  private static final int ARG_OUT_METHOD_PING = 15;
+  private static final int ARG_IN_METHOD_PING = 12;
+  private static final int ARG_OUT_METHOD_PING = 13;
   @io.grpc.ExperimentalApi
   public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
       com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> METHOD_PING =
@@ -140,6 +126,20 @@ public class UplinkGrpc {
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_PING)),
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_PING))
+          );
+  private static final int ARG_IN_METHOD_RECEIVED_REQUESTS = 14;
+  private static final int ARG_OUT_METHOD_RECEIVED_REQUESTS = 15;
+  @io.grpc.ExperimentalApi
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+      com.github.mcilloni.uplink.nano.UplinkProto.FriendList> METHOD_RECEIVED_REQUESTS =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.UNARY,
+          generateFullMethodName(
+              "protodef.Uplink", "ReceivedRequests"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Empty>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_RECEIVED_REQUESTS)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(ARG_OUT_METHOD_RECEIVED_REQUESTS))
           );
   private static final int ARG_IN_METHOD_REQUEST_FRIENDSHIP = 16;
   private static final int ARG_OUT_METHOD_REQUEST_FRIENDSHIP = 17;
@@ -154,6 +154,20 @@ public class UplinkGrpc {
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Username>(ARG_IN_METHOD_REQUEST_FRIENDSHIP)),
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_REQUEST_FRIENDSHIP))
+          );
+  private static final int ARG_IN_METHOD_SENT_REQUESTS = 18;
+  private static final int ARG_OUT_METHOD_SENT_REQUESTS = 19;
+  @io.grpc.ExperimentalApi
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+      com.github.mcilloni.uplink.nano.UplinkProto.FriendList> METHOD_SENT_REQUESTS =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.UNARY,
+          generateFullMethodName(
+              "protodef.Uplink", "SentRequests"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.Empty>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.Empty>(ARG_IN_METHOD_SENT_REQUESTS)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(ARG_OUT_METHOD_SENT_REQUESTS))
           );
 
   private static final class NanoFactory<T extends com.google.protobuf.nano.MessageNano>
@@ -204,23 +218,29 @@ public class UplinkGrpc {
       case ARG_OUT_METHOD_NOTIFICATIONS:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.Notification();
         break;
-      case ARG_IN_METHOD_PENDING_FRIENDSHIPS:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
-        break;
-      case ARG_OUT_METHOD_PENDING_FRIENDSHIPS:
-        o = new com.github.mcilloni.uplink.nano.UplinkProto.FriendList();
-        break;
       case ARG_IN_METHOD_PING:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
         break;
       case ARG_OUT_METHOD_PING:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
         break;
+      case ARG_IN_METHOD_RECEIVED_REQUESTS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
+        break;
+      case ARG_OUT_METHOD_RECEIVED_REQUESTS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.FriendList();
+        break;
       case ARG_IN_METHOD_REQUEST_FRIENDSHIP:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.Username();
         break;
       case ARG_OUT_METHOD_REQUEST_FRIENDSHIP:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
+        break;
+      case ARG_IN_METHOD_SENT_REQUESTS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.Empty();
+        break;
+      case ARG_OUT_METHOD_SENT_REQUESTS:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.FriendList();
         break;
       default:
         throw new AssertionError();
@@ -290,18 +310,23 @@ public class UplinkGrpc {
 
     /**
      */
-    public void pendingFriendships(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver);
-
-    /**
-     */
     public void ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver);
 
     /**
      */
+    public void receivedRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver);
+
+    /**
+     */
     public void requestFriendship(com.github.mcilloni.uplink.nano.UplinkProto.Username request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver);
+
+    /**
+     */
+    public void sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver);
   }
 
   @io.grpc.ExperimentalApi
@@ -344,21 +369,27 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public void pendingFriendships(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
-      asyncUnimplementedUnaryCall(METHOD_PENDING_FRIENDSHIPS, responseObserver);
-    }
-
-    @java.lang.Override
     public void ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_PING, responseObserver);
     }
 
     @java.lang.Override
+    public void receivedRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_RECEIVED_REQUESTS, responseObserver);
+    }
+
+    @java.lang.Override
     public void requestFriendship(com.github.mcilloni.uplink.nano.UplinkProto.Username request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_REQUEST_FRIENDSHIP, responseObserver);
+    }
+
+    @java.lang.Override
+    public void sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_SENT_REQUESTS, responseObserver);
     }
 
     @java.lang.Override public io.grpc.ServerServiceDefinition bindService() {
@@ -397,15 +428,19 @@ public class UplinkGrpc {
 
     /**
      */
-    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList pendingFriendships(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
-
-    /**
-     */
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
 
     /**
      */
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList receivedRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
+
+    /**
+     */
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp requestFriendship(com.github.mcilloni.uplink.nano.UplinkProto.Username request);
+
+    /**
+     */
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
   }
 
   /**
@@ -439,18 +474,23 @@ public class UplinkGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> pendingFriendships(
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> ping(
         com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> ping(
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> receivedRequests(
         com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
 
     /**
      */
     public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> requestFriendship(
         com.github.mcilloni.uplink.nano.UplinkProto.Username request);
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> sentRequests(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
   }
 
   public static class UplinkStub extends io.grpc.stub.AbstractStub<UplinkStub>
@@ -513,13 +553,6 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public void pendingFriendships(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
-        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(METHOD_PENDING_FRIENDSHIPS, getCallOptions()), request, responseObserver);
-    }
-
-    @java.lang.Override
     public void ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
       asyncUnaryCall(
@@ -527,10 +560,24 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
+    public void receivedRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_RECEIVED_REQUESTS, getCallOptions()), request, responseObserver);
+    }
+
+    @java.lang.Override
     public void requestFriendship(com.github.mcilloni.uplink.nano.UplinkProto.Username request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_REQUEST_FRIENDSHIP, getCallOptions()), request, responseObserver);
+    }
+
+    @java.lang.Override
+    public void sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_SENT_REQUESTS, getCallOptions()), request, responseObserver);
     }
   }
 
@@ -589,21 +636,27 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList pendingFriendships(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
-      return blockingUnaryCall(
-          getChannel(), METHOD_PENDING_FRIENDSHIPS, getCallOptions(), request);
-    }
-
-    @java.lang.Override
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp ping(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
       return blockingUnaryCall(
           getChannel(), METHOD_PING, getCallOptions(), request);
     }
 
     @java.lang.Override
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList receivedRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_RECEIVED_REQUESTS, getCallOptions(), request);
+    }
+
+    @java.lang.Override
     public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp requestFriendship(com.github.mcilloni.uplink.nano.UplinkProto.Username request) {
       return blockingUnaryCall(
           getChannel(), METHOD_REQUEST_FRIENDSHIP, getCallOptions(), request);
+    }
+
+    @java.lang.Override
+    public com.github.mcilloni.uplink.nano.UplinkProto.FriendList sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_SENT_REQUESTS, getCallOptions(), request);
     }
   }
 
@@ -660,13 +713,6 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
-    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> pendingFriendships(
-        com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
-      return futureUnaryCall(
-          getChannel().newCall(METHOD_PENDING_FRIENDSHIPS, getCallOptions()), request);
-    }
-
-    @java.lang.Override
     public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> ping(
         com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
       return futureUnaryCall(
@@ -674,10 +720,24 @@ public class UplinkGrpc {
     }
 
     @java.lang.Override
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> receivedRequests(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_RECEIVED_REQUESTS, getCallOptions()), request);
+    }
+
+    @java.lang.Override
     public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> requestFriendship(
         com.github.mcilloni.uplink.nano.UplinkProto.Username request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_REQUEST_FRIENDSHIP, getCallOptions()), request);
+    }
+
+    @java.lang.Override
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> sentRequests(
+        com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_SENT_REQUESTS, getCallOptions()), request);
     }
   }
 
@@ -687,9 +747,10 @@ public class UplinkGrpc {
   private static final int METHODID_LOGIN = 3;
   private static final int METHODID_NEW_USER = 4;
   private static final int METHODID_NOTIFICATIONS = 5;
-  private static final int METHODID_PENDING_FRIENDSHIPS = 6;
-  private static final int METHODID_PING = 7;
+  private static final int METHODID_PING = 6;
+  private static final int METHODID_RECEIVED_REQUESTS = 7;
   private static final int METHODID_REQUEST_FRIENDSHIP = 8;
+  private static final int METHODID_SENT_REQUESTS = 9;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -732,17 +793,21 @@ public class UplinkGrpc {
           serviceImpl.notifications((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.Notification>) responseObserver);
           break;
-        case METHODID_PENDING_FRIENDSHIPS:
-          serviceImpl.pendingFriendships((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
-              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>) responseObserver);
-          break;
         case METHODID_PING:
           serviceImpl.ping((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
           break;
+        case METHODID_RECEIVED_REQUESTS:
+          serviceImpl.receivedRequests((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>) responseObserver);
+          break;
         case METHODID_REQUEST_FRIENDSHIP:
           serviceImpl.requestFriendship((com.github.mcilloni.uplink.nano.UplinkProto.Username) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
+          break;
+        case METHODID_SENT_REQUESTS:
+          serviceImpl.sentRequests((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -806,13 +871,6 @@ public class UplinkGrpc {
               com.github.mcilloni.uplink.nano.UplinkProto.Notification>(
                 serviceImpl, METHODID_NOTIFICATIONS)))
         .addMethod(
-          METHOD_PENDING_FRIENDSHIPS,
-          asyncUnaryCall(
-            new MethodHandlers<
-              com.github.mcilloni.uplink.nano.UplinkProto.Empty,
-              com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(
-                serviceImpl, METHODID_PENDING_FRIENDSHIPS)))
-        .addMethod(
           METHOD_PING,
           asyncUnaryCall(
             new MethodHandlers<
@@ -820,12 +878,26 @@ public class UplinkGrpc {
               com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
                 serviceImpl, METHODID_PING)))
         .addMethod(
+          METHOD_RECEIVED_REQUESTS,
+          asyncUnaryCall(
+            new MethodHandlers<
+              com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+              com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(
+                serviceImpl, METHODID_RECEIVED_REQUESTS)))
+        .addMethod(
           METHOD_REQUEST_FRIENDSHIP,
           asyncUnaryCall(
             new MethodHandlers<
               com.github.mcilloni.uplink.nano.UplinkProto.Username,
               com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
                 serviceImpl, METHODID_REQUEST_FRIENDSHIP)))
+        .addMethod(
+          METHOD_SENT_REQUESTS,
+          asyncUnaryCall(
+            new MethodHandlers<
+              com.github.mcilloni.uplink.nano.UplinkProto.Empty,
+              com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(
+                serviceImpl, METHODID_SENT_REQUESTS)))
         .build();
   }
 }

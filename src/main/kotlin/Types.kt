@@ -14,6 +14,6 @@ package com.github.mcilloni.uplink;
 
 import java.util.*
 
-data class Message(val sender: String, val time: Date, val body: String)
+data class Message(val sender: String, val convID: Long, val body: String, val time : Date = Date())
 data class Conversation(val name: String?, val convID: Long)
 data class ConversationInvite(val sender: String, val conv: Conversation)

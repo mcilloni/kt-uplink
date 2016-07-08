@@ -22,6 +22,7 @@ import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
+import java.util.*
 import java.util.concurrent.ExecutionException
 import kotlin.concurrent.thread
 
@@ -109,6 +110,8 @@ interface NotificationHandler {
     fun onNewFriendship(userName: String)
     fun onConversationInvite(conversationInvite: ConversationInvite)
     fun onNewUserInConversation(userName: String, conv: Conversation)
+    fun onServerReady()
+    fun onError(t: Throwable)
 }
 
 class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, val username: String) {
@@ -132,6 +135,12 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
         throw normExc(e.cause ?: throw e)
     }
 
+    fun getFriendshipRequests() = try {
+        stubs.blockingStub.receivedRequests(UplinkProto.Empty()).friends
+    } catch (e: ExecutionException) {
+        throw normExc(e.cause ?: throw e)
+    }
+
     fun ping() : Boolean {
         return try {
             stubs.blockingStub.ping(UplinkProto.Empty())
@@ -150,11 +159,10 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
         throw normExc(e.cause ?: throw e)
     }
 
-    infix fun subscribe (handl: NotificationHandler) : Thread = thread(isDaemon = true) {
+    infix fun subscribe (handl: NotificationHandler) {
         stubs.asyncStub.notifications(UplinkProto.Empty(), object : StreamObserver<UplinkProto.Notification> {
             override fun onError(t: Throwable?) {
-                println("ERROR " +  t)
-                this@UplinkConnection subscribe handl // resubscribe the handler
+                handl.onError(t ?: NullPointerException())
             }
 
             override fun onCompleted() {}
@@ -163,16 +171,20 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
                 if (value != null) {
                     with (value) {
                         when (type) {
-                            Notification.MESSAGE -> {
+                            Notification.HANDLER_READY -> {
+                                handl.onServerReady()
+                            }
 
+                            Notification.MESSAGE -> {
+                                handl.onNewMessage(Message(userName, convId, body))
                             }
 
                             Notification.JOIN_REQ -> {
-                                handl.onConversationInvite(ConversationInvite(userName, Conversation(body, convId)))
+                                handl.onConversationInvite(ConversationInvite(userName, Conversation(convName, convId)))
                             }
 
                             Notification.JOIN_ACC -> {
-                                handl.onNewUserInConversation(userName, Conversation(body, convId))
+                                handl.onNewUserInConversation(userName, Conversation(convName, convId))
                             }
 
                             Notification.FRIENDSHIP_REQ -> {

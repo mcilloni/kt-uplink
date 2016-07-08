@@ -49,6 +49,9 @@ class UplinkTests {
         var recvFriendReq = SettableFuture.create<Unit>()
         var friendWith1 = SettableFuture.create<Unit>()
         var friendWith2 = SettableFuture.create<Unit>()
+
+        var serverReady1 = SettableFuture.create<Unit>()
+        var serverReady2 = SettableFuture.create<Unit>()
     }
 
     @test fun testANewUser() {
@@ -96,6 +99,16 @@ class UplinkTests {
 
     @test fun testESetupListeners() {
         conns[0]?.subscribe(object : NotificationHandler {
+            override fun onError(t: Throwable) {
+                fail(t.message)
+            }
+
+            override fun onServerReady() {
+                println("server ready for 1")
+
+                serverReady1.set(null)
+            }
+
             override fun onNewMessage(message: Message) {}
 
             override fun onFriendRequest(userName: String) {}
@@ -113,6 +126,16 @@ class UplinkTests {
         })
 
         conns[1]?.subscribe(object : NotificationHandler {
+            override fun onError(t: Throwable) {
+                fail(t.toString())
+            }
+
+            override fun onServerReady() {
+                println("server ready for 2")
+
+                serverReady2.set(null)
+            }
+
             override fun onNewMessage(message: Message) {}
 
             override fun onNewUserInConversation(userName: String, conv: Conversation) {}
@@ -122,6 +145,13 @@ class UplinkTests {
 
                 recvFriendReq.set(null)
 
+                val pendingRequests = conns[1]?.getFriendshipRequests().orEmpty()
+
+                println("pending: [${pendingRequests.joinToString()}]")
+
+                assert(userName in pendingRequests)
+
+                println("accepting now the friendship request from $userName")
                 conns[1]?.acceptFriendshipWith(userName)
             }
 
@@ -137,6 +167,9 @@ class UplinkTests {
     }
 
     @test fun testFRequestFriendship() {
+        serverReady1.get(2, TimeUnit.SECONDS)
+        serverReady2.get(2, TimeUnit.SECONDS)
+
         conns[0]?.sendFriendshipRequest(uinfos[1].name)
     }
 

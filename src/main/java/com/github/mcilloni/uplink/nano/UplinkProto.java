@@ -437,6 +437,7 @@ public interface UplinkProto {
     public static final int FRIENDSHIP_ACC = 2;
     public static final int JOIN_REQ = 3;
     public static final int JOIN_ACC = 4;
+    public static final int HANDLER_READY = 5;
 
     private static volatile Notification[] _emptyArray;
     public static Notification[] emptyArray() {
@@ -461,7 +462,10 @@ public interface UplinkProto {
     // optional int64 conv_id = 3;
     public long convId;
 
-    // optional string body = 4;
+    // optional string conv_name = 4;
+    public java.lang.String convName;
+
+    // optional string body = 5;
     public java.lang.String body;
 
     public Notification() {
@@ -472,6 +476,7 @@ public interface UplinkProto {
       type = com.github.mcilloni.uplink.nano.UplinkProto.Notification.MESSAGE;
       userName = "";
       convId = 0L;
+      convName = "";
       body = "";
       cachedSize = -1;
       return this;
@@ -489,8 +494,11 @@ public interface UplinkProto {
       if (this.convId != 0L) {
         output.writeInt64(3, this.convId);
       }
+      if (!this.convName.equals("")) {
+        output.writeString(4, this.convName);
+      }
       if (!this.body.equals("")) {
-        output.writeString(4, this.body);
+        output.writeString(5, this.body);
       }
       super.writeTo(output);
     }
@@ -510,9 +518,13 @@ public interface UplinkProto {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
             .computeInt64Size(3, this.convId);
       }
+      if (!this.convName.equals("")) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(4, this.convName);
+      }
       if (!this.body.equals("")) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
-            .computeStringSize(4, this.body);
+            .computeStringSize(5, this.body);
       }
       return size;
     }
@@ -540,6 +552,7 @@ public interface UplinkProto {
               case com.github.mcilloni.uplink.nano.UplinkProto.Notification.FRIENDSHIP_ACC:
               case com.github.mcilloni.uplink.nano.UplinkProto.Notification.JOIN_REQ:
               case com.github.mcilloni.uplink.nano.UplinkProto.Notification.JOIN_ACC:
+              case com.github.mcilloni.uplink.nano.UplinkProto.Notification.HANDLER_READY:
                 this.type = value;
                 break;
             }
@@ -554,6 +567,10 @@ public interface UplinkProto {
             break;
           }
           case 34: {
+            this.convName = input.readString();
+            break;
+          }
+          case 42: {
             this.body = input.readString();
             break;
           }
