@@ -22,9 +22,7 @@ import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
-import java.util.*
 import java.util.concurrent.ExecutionException
-import kotlin.concurrent.thread
 
 internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlockingStub) {
     var asyncStub = astub
@@ -74,7 +72,7 @@ fun login(url: String, port: Int, userName: String, authPass: String) = try {
 fun newUser(url: String, port: Int, userName: String, authPass: String) = try {
     val stubs = connect(url, port)
 
-    val existsResp = stubs.blockingStub.exists(with(UplinkProto.Username()) {
+    val existsResp = stubs.blockingStub.exists(with(UplinkProto.Name()) {
         name = userName
 
         this
@@ -119,44 +117,69 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
         stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
     }
 
-    fun acceptFriendshipWith(name: String) = try {
-        stubs.blockingStub.acceptFriendship(with(UplinkProto.Username()) {
+    fun acceptFriendshipWith(name: String) = rpc {
+        stubs.blockingStub.acceptFriendship(with(UplinkProto.Name()) {
             this.name = name
 
             this
-        })
-    } catch (e: ExecutionException) {
-        throw normExc(e.cause ?: throw e)
+        }).success
     }
 
-    fun getFriends() = try {
+    fun acceptInvite(convID: Long) = rpc {
+        stubs.blockingStub.acceptInvite(with(UplinkProto.ID()) {
+            this.id = convID
+
+            this
+        }).success
+    }
+
+    fun beginConversation(name: String) = rpc {
+        Conversation(name, stubs.blockingStub.newConversation(with(UplinkProto.Name()) {
+            this.name = name
+
+            this
+        }).id)
+    }
+
+    fun getConversations() = rpc {
+        stubs.blockingStub.conversations(UplinkProto.Empty()).convs.map {
+            Conversation(it.name, it.id)
+        }
+    }
+
+    fun getFriends() = rpc {
         stubs.blockingStub.friends(UplinkProto.Empty()).friends
-    } catch (e: ExecutionException) {
-        throw normExc(e.cause ?: throw e)
     }
 
-    fun getFriendshipRequests() = try {
+    fun getFriendshipRequests() = rpc {
         stubs.blockingStub.receivedRequests(UplinkProto.Empty()).friends
-    } catch (e: ExecutionException) {
-        throw normExc(e.cause ?: throw e)
     }
 
-    fun ping() : Boolean {
-        return try {
-            stubs.blockingStub.ping(UplinkProto.Empty())
-        } catch (e: ExecutionException) {
-            throw normExc(e.cause ?: throw e)
-        }.success
+    fun getInvites() = rpc {
+        stubs.blockingStub.invites(UplinkProto.Empty()).invites.map {
+            Invite(fromUser = it.who, toConv = it.convName, convID = it.convId)
+        }
     }
 
-    fun sendFriendshipRequest(user: String) : Boolean = try {
-        stubs.blockingStub.requestFriendship(with(UplinkProto.Username()){
+    fun ping() = rpc {
+        stubs.blockingStub.ping(UplinkProto.Empty()).success
+    }
+
+    fun sendFriendshipRequest(user: String) = rpc {
+        stubs.blockingStub.requestFriendship(with(UplinkProto.Name()){
             name = user
 
             this
         }).success
-    } catch (e: ExecutionException) {
-        throw normExc(e.cause ?: throw e)
+    }
+
+    fun sendInvite(user: String, convID: Long) = rpc {
+        stubs.blockingStub.sendInvite(with(UplinkProto.Invite()){
+            who = user
+            convId = convID
+
+            this
+        }).success
     }
 
     infix fun subscribe (handl: NotificationHandler) {

@@ -12,8 +12,13 @@
 
 package com.github.mcilloni.uplink
 
-import com.github.mcilloni.uplink.nano.UplinkProto.*
-import io.grpc.StatusRuntimeException
+import java.util.concurrent.ExecutionException
+
+internal inline fun <T> rpc(body: () -> T) = try {
+    body()
+} catch (e: ExecutionException) {
+    throw normExc(e.cause ?: throw e)
+}
 
 internal fun normExc(e: Throwable) : Throwable {
     val msg = e.message ?: throw e

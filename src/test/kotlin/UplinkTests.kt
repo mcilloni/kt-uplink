@@ -52,6 +52,13 @@ class UplinkTests {
 
         var serverReady1 = SettableFuture.create<Unit>()
         var serverReady2 = SettableFuture.create<Unit>()
+
+        var invited2 = SettableFuture.create<Unit>()
+
+        var someoneJoinedConn1 = SettableFuture.create<Unit>()
+        var someoneJoinedConn2 = SettableFuture.create<Unit>()
+
+        var conv1 : Conversation? = null
     }
 
     @test fun testANewUser() {
@@ -121,7 +128,11 @@ class UplinkTests {
 
             override fun onConversationInvite(conversationInvite: ConversationInvite) {}
 
-            override fun onNewUserInConversation(userName: String, conv: Conversation) {}
+            override fun onNewUserInConversation(userName: String, conv: Conversation) {
+                println("1: $userName joined $conv")
+
+                someoneJoinedConn1.set(null)
+            }
 
         })
 
@@ -138,7 +149,14 @@ class UplinkTests {
 
             override fun onNewMessage(message: Message) {}
 
-            override fun onNewUserInConversation(userName: String, conv: Conversation) {}
+            override fun onNewUserInConversation(userName: String, conv: Conversation) {
+                assert(userName == conns[1]?.username)
+                assert(conv1 == conv)
+
+                println("2: joined $conv")
+
+                someoneJoinedConn2.set(null)
+            }
 
             override fun onFriendRequest(userName: String) {
                 println("friendship request from $userName")
@@ -161,7 +179,16 @@ class UplinkTests {
                 friendWith1.set(null)
             }
 
-            override fun onConversationInvite(conversationInvite: ConversationInvite) {}
+            override fun onConversationInvite(conversationInvite: ConversationInvite) {
+                println("2 invited to conversation ${conversationInvite.conv} by ${conversationInvite.sender}")
+
+                invited2.set(null)
+
+                assert(conversationInvite.conv.convID in conns[1]?.getInvites().orEmpty().map {it.convID})
+
+                println("accepting now the invite to conversation ${conversationInvite.conv}")
+                assert(conns[1]?.acceptInvite(conversationInvite.conv.convID) == true)
+            }
 
         })
     }
@@ -181,5 +208,37 @@ class UplinkTests {
         assert(uinfos[1].name in conns[0]?.getFriends().orEmpty())
         assert(uinfos[0].name in conns[1]?.getFriends().orEmpty())
 
+    }
+
+    @test fun testHCreateConversation() {
+        val name = "Conv1"
+        conv1 = conns[0]?.beginConversation(name)
+
+        assert (conv1?.name == name)
+
+        val convs = conns[0]?.getConversations().orEmpty()
+
+        assert(name in convs.map {it.name})
+
+        println("conversations for 1: [${convs.joinToString()}]")
+    }
+
+    @test fun testIInviteUser() {
+        assert(conns[0]?.sendInvite(uinfos[1].name, conv1?.convID!!) == true)
+    }
+
+    @test fun testJAcceptInvite() {
+        invited2.get(2, TimeUnit.SECONDS)
+
+        someoneJoinedConn1.get(2, TimeUnit.SECONDS)
+        someoneJoinedConn2.get(2, TimeUnit.SECONDS)
+    }
+
+    @test fun testKCheckConv() {
+        val convs1 = conns[1]?.getConversations().orEmpty()
+
+        println("conversations for 2: [${convs1.joinToString()}]")
+
+        assert(conv1?.convID in convs1.map {it.convID})
     }
 }
