@@ -18,7 +18,6 @@ import org.junit.FixMethodOrder
 import org.junit.runners.MethodSorters
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
 const val URL = "localhost"
@@ -296,15 +295,15 @@ class UplinkTests {
         assert(firstMsgs.size == 20)
 
         val nextMsgs = conv1?.getMessages(firstMsgs[0].tag).orEmpty()
-        println("Conv (next 5): $nextMsgs")
+        println("Conv (next 5 + 1svc): $nextMsgs")
 
-        assert(nextMsgs.size == 5)
+        assert(nextMsgs.size == 6)
 
         val merged = nextMsgs + firstMsgs
 
         println(merged)
 
-        assert(merged.size == 25)
+        assert(merged.size == 26)
         assert(messages1 == merged.filter{it.sender == uinfos[0].name}.map{it.body})
         assert(messages2 == merged.filter{it.sender == uinfos[1].name}.map{it.body})
     }

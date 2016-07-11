@@ -1784,4 +1784,88 @@ public interface UplinkProto {
       return new NewMsgResp().mergeFrom(input);
     }
   }
+
+  public static final class RegID extends
+      com.google.protobuf.nano.MessageNano {
+
+    private static volatile RegID[] _emptyArray;
+    public static RegID[] emptyArray() {
+      // Lazily initializes the empty array
+      if (_emptyArray == null) {
+        synchronized (
+            com.google.protobuf.nano.InternalNano.LAZY_INIT_LOCK) {
+          if (_emptyArray == null) {
+            _emptyArray = new RegID[0];
+          }
+        }
+      }
+      return _emptyArray;
+    }
+
+    // optional string reg_id = 1;
+    public java.lang.String regId;
+
+    public RegID() {
+      clear();
+    }
+
+    public RegID clear() {
+      regId = "";
+      cachedSize = -1;
+      return this;
+    }
+
+    @Override
+    public void writeTo(com.google.protobuf.nano.CodedOutputByteBufferNano output)
+        throws java.io.IOException {
+      if (!this.regId.equals("")) {
+        output.writeString(1, this.regId);
+      }
+      super.writeTo(output);
+    }
+
+    @Override
+    protected int computeSerializedSize() {
+      int size = super.computeSerializedSize();
+      if (!this.regId.equals("")) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+            .computeStringSize(1, this.regId);
+      }
+      return size;
+    }
+
+    @Override
+    public RegID mergeFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      while (true) {
+        int tag = input.readTag();
+        switch (tag) {
+          case 0:
+            return this;
+          default: {
+            if (!com.google.protobuf.nano.WireFormatNano.parseUnknownField(input, tag)) {
+              return this;
+            }
+            break;
+          }
+          case 10: {
+            this.regId = input.readString();
+            break;
+          }
+        }
+      }
+    }
+
+    public static RegID parseFrom(byte[] data)
+        throws com.google.protobuf.nano.InvalidProtocolBufferNanoException {
+      return com.google.protobuf.nano.MessageNano.mergeFrom(new RegID(), data);
+    }
+
+    public static RegID parseFrom(
+            com.google.protobuf.nano.CodedInputByteBufferNano input)
+        throws java.io.IOException {
+      return new RegID().mergeFrom(input);
+    }
+  }
 }

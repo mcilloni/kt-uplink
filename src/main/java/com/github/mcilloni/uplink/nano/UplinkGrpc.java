@@ -267,6 +267,20 @@ public class UplinkGrpc {
           io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>marshaller(
               new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(ARG_OUT_METHOD_SENT_REQUESTS))
           );
+  private static final int ARG_IN_METHOD_SUBMIT_REG_ID = 34;
+  private static final int ARG_OUT_METHOD_SUBMIT_REG_ID = 35;
+  @io.grpc.ExperimentalApi
+  public static final io.grpc.MethodDescriptor<com.github.mcilloni.uplink.nano.UplinkProto.RegID,
+      com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> METHOD_SUBMIT_REG_ID =
+      io.grpc.MethodDescriptor.create(
+          io.grpc.MethodDescriptor.MethodType.UNARY,
+          generateFullMethodName(
+              "protodef.Uplink", "SubmitRegID"),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.RegID>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.RegID>(ARG_IN_METHOD_SUBMIT_REG_ID)),
+          io.grpc.protobuf.nano.NanoUtils.<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>marshaller(
+              new NanoFactory<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(ARG_OUT_METHOD_SUBMIT_REG_ID))
+          );
 
   private static final class NanoFactory<T extends com.google.protobuf.nano.MessageNano>
       implements io.grpc.protobuf.nano.MessageNanoFactory<T> {
@@ -381,6 +395,12 @@ public class UplinkGrpc {
         break;
       case ARG_OUT_METHOD_SENT_REQUESTS:
         o = new com.github.mcilloni.uplink.nano.UplinkProto.FriendList();
+        break;
+      case ARG_IN_METHOD_SUBMIT_REG_ID:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.RegID();
+        break;
+      case ARG_OUT_METHOD_SUBMIT_REG_ID:
+        o = new com.github.mcilloni.uplink.nano.UplinkProto.BoolResp();
         break;
       default:
         throw new AssertionError();
@@ -502,6 +522,11 @@ public class UplinkGrpc {
      */
     public void sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request,
         io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> responseObserver);
+
+    /**
+     */
+    public void submitRegID(com.github.mcilloni.uplink.nano.UplinkProto.RegID request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver);
   }
 
   @io.grpc.ExperimentalApi
@@ -609,6 +634,12 @@ public class UplinkGrpc {
       asyncUnimplementedUnaryCall(METHOD_SENT_REQUESTS, responseObserver);
     }
 
+    @java.lang.Override
+    public void submitRegID(com.github.mcilloni.uplink.nano.UplinkProto.RegID request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
+      asyncUnimplementedUnaryCall(METHOD_SUBMIT_REG_ID, responseObserver);
+    }
+
     @java.lang.Override public io.grpc.ServerServiceDefinition bindService() {
       return UplinkGrpc.bindService(this);
     }
@@ -686,6 +717,10 @@ public class UplinkGrpc {
     /**
      */
     public com.github.mcilloni.uplink.nano.UplinkProto.FriendList sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
+
+    /**
+     */
+    public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp submitRegID(com.github.mcilloni.uplink.nano.UplinkProto.RegID request);
   }
 
   /**
@@ -771,6 +806,11 @@ public class UplinkGrpc {
      */
     public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.FriendList> sentRequests(
         com.github.mcilloni.uplink.nano.UplinkProto.Empty request);
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> submitRegID(
+        com.github.mcilloni.uplink.nano.UplinkProto.RegID request);
   }
 
   public static class UplinkStub extends io.grpc.stub.AbstractStub<UplinkStub>
@@ -908,6 +948,13 @@ public class UplinkGrpc {
       asyncUnaryCall(
           getChannel().newCall(METHOD_SENT_REQUESTS, getCallOptions()), request, responseObserver);
     }
+
+    @java.lang.Override
+    public void submitRegID(com.github.mcilloni.uplink.nano.UplinkProto.RegID request,
+        io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> responseObserver) {
+      asyncUnaryCall(
+          getChannel().newCall(METHOD_SUBMIT_REG_ID, getCallOptions()), request, responseObserver);
+    }
   }
 
   public static class UplinkBlockingStub extends io.grpc.stub.AbstractStub<UplinkBlockingStub>
@@ -1028,6 +1075,12 @@ public class UplinkGrpc {
     public com.github.mcilloni.uplink.nano.UplinkProto.FriendList sentRequests(com.github.mcilloni.uplink.nano.UplinkProto.Empty request) {
       return blockingUnaryCall(
           getChannel(), METHOD_SENT_REQUESTS, getCallOptions(), request);
+    }
+
+    @java.lang.Override
+    public com.github.mcilloni.uplink.nano.UplinkProto.BoolResp submitRegID(com.github.mcilloni.uplink.nano.UplinkProto.RegID request) {
+      return blockingUnaryCall(
+          getChannel(), METHOD_SUBMIT_REG_ID, getCallOptions(), request);
     }
   }
 
@@ -1159,6 +1212,13 @@ public class UplinkGrpc {
       return futureUnaryCall(
           getChannel().newCall(METHOD_SENT_REQUESTS, getCallOptions()), request);
     }
+
+    @java.lang.Override
+    public com.google.common.util.concurrent.ListenableFuture<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp> submitRegID(
+        com.github.mcilloni.uplink.nano.UplinkProto.RegID request) {
+      return futureUnaryCall(
+          getChannel().newCall(METHOD_SUBMIT_REG_ID, getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_ACCEPT_FRIENDSHIP = 0;
@@ -1178,6 +1238,7 @@ public class UplinkGrpc {
   private static final int METHODID_SEND_INVITE = 14;
   private static final int METHODID_SEND_MESSAGE = 15;
   private static final int METHODID_SENT_REQUESTS = 16;
+  private static final int METHODID_SUBMIT_REG_ID = 17;
 
   private static class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -1263,6 +1324,10 @@ public class UplinkGrpc {
         case METHODID_SENT_REQUESTS:
           serviceImpl.sentRequests((com.github.mcilloni.uplink.nano.UplinkProto.Empty) request,
               (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.FriendList>) responseObserver);
+          break;
+        case METHODID_SUBMIT_REG_ID:
+          serviceImpl.submitRegID((com.github.mcilloni.uplink.nano.UplinkProto.RegID) request,
+              (io.grpc.stub.StreamObserver<com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -1402,6 +1467,13 @@ public class UplinkGrpc {
               com.github.mcilloni.uplink.nano.UplinkProto.Empty,
               com.github.mcilloni.uplink.nano.UplinkProto.FriendList>(
                 serviceImpl, METHODID_SENT_REQUESTS)))
+        .addMethod(
+          METHOD_SUBMIT_REG_ID,
+          asyncUnaryCall(
+            new MethodHandlers<
+              com.github.mcilloni.uplink.nano.UplinkProto.RegID,
+              com.github.mcilloni.uplink.nano.UplinkProto.BoolResp>(
+                serviceImpl, METHODID_SUBMIT_REG_ID)))
         .build();
   }
 }

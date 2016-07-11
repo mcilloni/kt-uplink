@@ -224,4 +224,12 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
 
         })
     }
+
+    fun submitPushRegistrationId(regID: String) = rpc {
+        stubs.blockingStub.submitRegID(with(UplinkProto.RegID()) {
+            this.regId = regID
+
+            this
+        }).success
+    }
 }

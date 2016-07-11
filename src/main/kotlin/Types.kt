@@ -14,7 +14,40 @@ package com.github.mcilloni.uplink;
 
 import java.util.*
 
-data class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String, val time : Date = Date())
+class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String, val time : Date = Date()) {
+    val svcMessage = sender == "uplink"
+
+    override fun toString(): String{
+        return "Message(tag=$tag, sender='$sender', convID=$convID, body='$body', time=$time, svcMessage=$svcMessage)"
+    }
+
+    override fun equals(other: Any?): Boolean{
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Message
+
+        if (tag != other.tag) return false
+        if (sender != other.sender) return false
+        if (convID != other.convID) return false
+        if (body != other.body) return false
+        if (time != other.time) return false
+        if (svcMessage != other.svcMessage) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int{
+        var result = tag.hashCode()
+        result = 31 * result + sender.hashCode()
+        result = 31 * result + convID.hashCode()
+        result = 31 * result + body.hashCode()
+        result = 31 * result + time.hashCode()
+        result = 31 * result + svcMessage.hashCode()
+        return result
+    }
+
+}
 data class Invite internal constructor (val fromUser: String, val toConv: String, val convID: Long)
 data class ConversationInvite internal constructor (val sender: String, val conv: Conversation)
 
