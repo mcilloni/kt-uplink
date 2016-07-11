@@ -28,7 +28,8 @@ internal fun normExc(e: Throwable) : Throwable {
         msg.contains("ESERVERFAULT") -> ServerFaultException(e)
         msg.contains("ERESERVEDUSER") -> ReservedUserException(e)
         msg.contains("EALREADYFRIENDS") -> AlreadyFriendsException(e)
-        msg.contains("ERRNOREQUEST") -> NoFriendshipRequestException(e)
+        msg.contains("ENOREQUEST") -> NoFriendshipRequestException(e)
+        msg.contains("ENOTMEMBER") -> NotMemberException(e)
         else -> e
     }
 }

@@ -18,6 +18,8 @@ import org.junit.FixMethodOrder
 import org.junit.runners.MethodSorters
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import kotlin.concurrent.thread
 
 const val URL = "localhost"
 const val PORT = 4444
@@ -35,6 +37,10 @@ fun genRandStr(): String {
     }
 
     return String(text);
+}
+
+fun genMessages(l: String, x: Short) = (1..x).map {
+    "$l: $it"
 }
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -59,6 +65,16 @@ class UplinkTests {
         var someoneJoinedConn2 = SettableFuture.create<Unit>()
 
         var conv1 : Conversation? = null
+        var conv2 : Conversation? = null
+
+        val messages1 = genMessages("1", 15)
+        val messages2 = genMessages("2", 10)
+
+        val recvBy1 = ArrayList<Message>(messages1.size + messages2.size)
+        val recvBy2 = ArrayList<Message>(messages1.size + messages2.size)
+
+        var recvAll1 = SettableFuture.create<Unit>()
+        var recvAll2 = SettableFuture.create<Unit>()
     }
 
     @test fun testANewUser() {
@@ -107,6 +123,7 @@ class UplinkTests {
     @test fun testESetupListeners() {
         conns[0]?.subscribe(object : NotificationHandler {
             override fun onError(t: Throwable) {
+                t.printStackTrace()
                 fail(t.message)
             }
 
@@ -116,7 +133,14 @@ class UplinkTests {
                 serverReady1.set(null)
             }
 
-            override fun onNewMessage(message: Message) {}
+            @Synchronized
+            override fun onNewMessage(message: Message) {
+                recvBy1.add(message)
+
+                if (recvBy1.size == messages1.size + messages2.size) {
+                    recvAll1.set(null)
+                }
+            }
 
             override fun onFriendRequest(userName: String) {}
 
@@ -138,6 +162,7 @@ class UplinkTests {
 
         conns[1]?.subscribe(object : NotificationHandler {
             override fun onError(t: Throwable) {
+                t.printStackTrace()
                 fail(t.toString())
             }
 
@@ -147,11 +172,18 @@ class UplinkTests {
                 serverReady2.set(null)
             }
 
-            override fun onNewMessage(message: Message) {}
+            @Synchronized
+            override fun onNewMessage(message: Message) {
+                recvBy2.add(message)
+
+                if (recvBy2.size == messages1.size + messages2.size) {
+                    recvAll2.set(null)
+                }
+            }
 
             override fun onNewUserInConversation(userName: String, conv: Conversation) {
                 assert(userName == conns[1]?.username)
-                assert(conv1 == conv)
+                assert(conv1?.convID == conv.convID)
 
                 println("2: joined $conv")
 
@@ -239,6 +271,41 @@ class UplinkTests {
 
         println("conversations for 2: [${convs1.joinToString()}]")
 
-        assert(conv1?.convID in convs1.map {it.convID})
+        conv2 = convs1.find { it.convID == conv1?.convID }
+
+        assert(conv2 != null)
+    }
+
+    @test fun testLSendMessages() {
+        val thread1 = thread { messages1.forEach { conv1?.send(it) }}
+        val thread2 = thread { messages2.forEach { conv2?.send(it) }}
+
+        recvAll1.get(2, TimeUnit.SECONDS)
+        recvAll2.get(2, TimeUnit.SECONDS)
+
+        println("Recv1: ${recvBy1}")
+        println("Recv2: ${recvBy2}")
+
+        assert(messages1 == recvBy2.filter{it.sender == uinfos[0].name}.map{it.body})
+        assert(messages2 == recvBy1.filter{it.sender == uinfos[1].name}.map{it.body})
+    }
+
+    @test fun testMReadConversation() {
+        val firstMsgs = conv1?.getMessages().orEmpty()
+        println("Conv (first 20): $firstMsgs")
+        assert(firstMsgs.size == 20)
+
+        val nextMsgs = conv1?.getMessages(firstMsgs[0].tag).orEmpty()
+        println("Conv (next 5): $nextMsgs")
+
+        assert(nextMsgs.size == 5)
+
+        val merged = nextMsgs + firstMsgs
+
+        println(merged)
+
+        assert(merged.size == 25)
+        assert(messages1 == merged.filter{it.sender == uinfos[0].name}.map{it.body})
+        assert(messages2 == merged.filter{it.sender == uinfos[1].name}.map{it.body})
     }
 }

@@ -112,7 +112,7 @@ interface NotificationHandler {
     fun onError(t: Throwable)
 }
 
-class UplinkConnection internal constructor(private val stubs: Stubs, val sessInfo: Session, val username: String) {
+class UplinkConnection internal constructor(internal val stubs: Stubs, val sessInfo: Session, val username: String) {
     init {
         stubs.setSessionInfo(sessInfo.uid, sessInfo.sessid)
     }
@@ -138,12 +138,12 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
             this.name = name
 
             this
-        }).id)
+        }).id, this)
     }
 
     fun getConversations() = rpc {
         stubs.blockingStub.conversations(UplinkProto.Empty()).convs.map {
-            Conversation(it.name, it.id)
+            Conversation(it.name, it.id, this)
         }
     }
 
@@ -199,15 +199,15 @@ class UplinkConnection internal constructor(private val stubs: Stubs, val sessIn
                             }
 
                             Notification.MESSAGE -> {
-                                handl.onNewMessage(Message(userName, convId, body))
+                                handl.onNewMessage(Message(msgTag, userName, convId, body))
                             }
 
                             Notification.JOIN_REQ -> {
-                                handl.onConversationInvite(ConversationInvite(userName, Conversation(convName, convId)))
+                                handl.onConversationInvite(ConversationInvite(userName, Conversation(convName, convId, this@UplinkConnection)))
                             }
 
                             Notification.JOIN_ACC -> {
-                                handl.onNewUserInConversation(userName, Conversation(convName, convId))
+                                handl.onNewUserInConversation(userName, Conversation(convName, convId, this@UplinkConnection))
                             }
 
                             Notification.FRIENDSHIP_REQ -> {

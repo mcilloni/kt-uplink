@@ -14,7 +14,8 @@ package com.github.mcilloni.uplink;
 
 import java.util.*
 
-data class Message(val sender: String, val convID: Long, val body: String, val time : Date = Date())
-data class Conversation(val name: String, val convID: Long)
-data class Invite(val fromUser: String, val toConv: String, val convID: Long)
-data class ConversationInvite(val sender: String, val conv: Conversation)
+data class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String, val time : Date = Date())
+data class Invite internal constructor (val fromUser: String, val toConv: String, val convID: Long)
+data class ConversationInvite internal constructor (val sender: String, val conv: Conversation)
+
+
