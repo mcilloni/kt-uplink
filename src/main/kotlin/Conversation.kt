@@ -15,8 +15,26 @@ package com.github.mcilloni.uplink;
 import com.github.mcilloni.uplink.nano.UplinkProto
 import java.util.*
 
-class Conversation internal constructor (val name: String, val convID: Long, private val connection: UplinkConnection) {
-    fun getMessages(lastTag : Long = 0) = rpc {
+open class Conversation internal constructor (val name: String, val convID: Long, private val connection: UplinkConnection) {
+    var finished = false
+        private set
+
+    private val cached = ArrayList<Message>(20)
+    private var lastTag = 0L
+
+    fun next() : List<Message> {
+        val next = getMessages(lastTag)
+
+        if (next.size > 0) {
+            lastTag = next[0].tag
+
+            cached.addAll(0, next)
+        }
+
+        return cached
+    }
+
+    protected fun getMessages(lastTag : Long = 0) = rpc {
         connection.stubs.blockingStub.messages(with(UplinkProto.FetchOpts()) {
             this.convId = convID
             this.lastTag = lastTag

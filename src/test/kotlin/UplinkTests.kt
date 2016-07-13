@@ -276,8 +276,8 @@ class UplinkTests {
     }
 
     @test fun testLSendMessages() {
-        val thread1 = thread { messages1.forEach { conv1?.send(it) }}
-        val thread2 = thread { messages2.forEach { conv2?.send(it) }}
+        thread { messages1.forEach { conv1?.send(it) }}
+        thread { messages2.forEach { conv2?.send(it) }}
 
         recvAll1.get(2, TimeUnit.SECONDS)
         recvAll2.get(2, TimeUnit.SECONDS)
@@ -290,21 +290,15 @@ class UplinkTests {
     }
 
     @test fun testMReadConversation() {
-        val firstMsgs = conv1?.getMessages().orEmpty()
-        println("Conv (first 20): $firstMsgs")
-        assert(firstMsgs.size == 20)
+        var msgs = conv1?.next().orEmpty()
+        println("Conv (first 20): $msgs")
+        assert(msgs.size == 20)
 
-        val nextMsgs = conv1?.getMessages(firstMsgs[0].tag).orEmpty()
-        println("Conv (next 5 + 1svc): $nextMsgs")
+        msgs = conv1?.next().orEmpty()
+        println("Conv (whole): $msgs")
 
-        assert(nextMsgs.size == 6)
-
-        val merged = nextMsgs + firstMsgs
-
-        println(merged)
-
-        assert(merged.size == 26)
-        assert(messages1 == merged.filter{it.sender == uinfos[0].name}.map{it.body})
-        assert(messages2 == merged.filter{it.sender == uinfos[1].name}.map{it.body})
+        assert(msgs.size == 26)
+        assert(messages1 == msgs.filter{it.sender == uinfos[0].name}.map{it.body})
+        assert(messages2 == msgs.filter{it.sender == uinfos[1].name}.map{it.body})
     }
 }
