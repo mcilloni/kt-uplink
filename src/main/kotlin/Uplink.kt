@@ -43,20 +43,18 @@ internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlock
     }
 }
 
-private fun connect(url: String, port: Int) = try {
+private fun connect(url: String, port: Int) : Stubs {
     val chan = ManagedChannelBuilder.forAddress(url, port).usePlaintext(true).build()
 
     val blocking = UplinkGrpc.newBlockingStub(chan)
     val async = UplinkGrpc.newStub(chan)
 
-    Stubs(async, blocking)
-} catch (e: StatusException) {
-    throw if (e.status == Status.UNAVAILABLE) UnavailableException() else e
+    return Stubs(async, blocking)
 }
 
 data class Session(val uid: Long, val sessid: String)
 
-fun login(url: String, port: Int, userName: String, authPass: String) = try {
+fun login(url: String, port: Int, userName: String, authPass: String) = rpc {
     val stubs = connect(url, port)
 
     val info = stubs.blockingStub.login(with(UplinkProto.AuthInfo()) {
@@ -69,11 +67,9 @@ fun login(url: String, port: Int, userName: String, authPass: String) = try {
     val session = Session(info.uid, info.sessionId)
 
     UplinkConnection(stubs, session, userName)
-} catch (e: ExecutionException) {
-    throw normExc(e.cause ?: throw e)
 }
 
-fun newUser(url: String, port: Int, userName: String, authPass: String) = try {
+fun newUser(url: String, port: Int, userName: String, authPass: String) = rpc {
     val stubs = connect(url, port)
 
     val existsResp = stubs.blockingStub.exists(with(UplinkProto.Name()) {
@@ -94,8 +90,6 @@ fun newUser(url: String, port: Int, userName: String, authPass: String) = try {
     })
 
     UplinkConnection(stubs, Session(resp.uid, resp.sessionId), userName)
-} catch (e: ExecutionException) {
-    throw normExc(e.cause ?: throw e)
 }
 
 fun resumeSession(url: String, port: Int, name: String, sessInfo: Session) = try {

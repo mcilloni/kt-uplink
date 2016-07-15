@@ -12,12 +12,17 @@
 
 package com.github.mcilloni.uplink
 
+import io.grpc.Status
+import io.grpc.StatusException
+import io.grpc.StatusRuntimeException
 import java.util.concurrent.ExecutionException
 
 internal inline fun <T> rpc(body: () -> T) = try {
     body()
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
+} catch (e: StatusRuntimeException) {
+    throw if (e.status.code == Status.Code.UNAVAILABLE) UnavailableException() else e
 }
 
 internal fun normExc(e: Throwable) : Throwable {
@@ -50,4 +55,4 @@ class ServerFaultException internal constructor(t : Throwable = Throwable()) : U
 class BrokeProtoException internal constructor(t : Throwable = Throwable()) : UplinkException("protocol broken, please report", t)
 class AuthFailException internal constructor(t : Throwable = Throwable()) : UplinkException("login data rejected", t)
 class ReservedUserException internal constructor(t : Throwable = Throwable()) : UplinkException("trying to access data of a reserved user", t)
-class UnavailableException internal constructor() : Exception("service is unavailable")
+class UnavailableException internal constructor() : Exception("Uplink is unavailable")
