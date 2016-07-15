@@ -20,6 +20,8 @@ import com.github.mcilloni.uplink.nano.UplinkProto
 import com.github.mcilloni.uplink.nano.UplinkProto.Notification
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
+import io.grpc.Status
+import io.grpc.StatusException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.ExecutionException
@@ -41,13 +43,15 @@ internal class Stubs(astub: UplinkGrpc.UplinkStub, bstub: UplinkGrpc.UplinkBlock
     }
 }
 
-private fun connect(url: String, port: Int) : Stubs {
+private fun connect(url: String, port: Int) = try {
     val chan = ManagedChannelBuilder.forAddress(url, port).usePlaintext(true).build()
 
     val blocking = UplinkGrpc.newBlockingStub(chan)
     val async = UplinkGrpc.newStub(chan)
 
-    return Stubs(async, blocking)
+    Stubs(async, blocking)
+} catch (e: StatusException) {
+    throw if (e.status == Status.UNAVAILABLE) UnavailableException() else e
 }
 
 data class Session(val uid: Long, val sessid: String)

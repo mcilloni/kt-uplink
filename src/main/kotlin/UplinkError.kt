@@ -50,3 +50,4 @@ class ServerFaultException internal constructor(t : Throwable = Throwable()) : U
 class BrokeProtoException internal constructor(t : Throwable = Throwable()) : UplinkException("protocol broken, please report", t)
 class AuthFailException internal constructor(t : Throwable = Throwable()) : UplinkException("login data rejected", t)
 class ReservedUserException internal constructor(t : Throwable = Throwable()) : UplinkException("trying to access data of a reserved user", t)
+class UnavailableException internal constructor() : Exception("service is unavailable")
