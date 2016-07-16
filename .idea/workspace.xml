@@ -12,8 +12,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1bf8e03b-a46e-4025-a85f-134beadcb6a9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/Uplink.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/Uplink.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/kotlin/UplinkError.kt" afterPath="$PROJECT_DIR$/src/main/kotlin/UplinkError.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt" afterPath="$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt" />
     </list>
     <ignored path="kt-uplink.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,8 +67,8 @@
       <file leaf-file-name="Uplink.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Uplink.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+            <state relative-caret-position="223">
+              <caret line="81" column="14" selection-start-line="81" selection-start-column="14" selection-end-line="81" selection-end-column="14" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#556#950#0" expanded="true" />
@@ -80,7 +80,7 @@
       <file leaf-file-name="Types.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Types.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
+            <state relative-caret-position="369">
               <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -92,7 +92,7 @@
       <file leaf-file-name="Conversation.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/Conversation.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16">
+            <state relative-caret-position="224">
               <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
               <folding>
                 <element signature="e#508#577#0" expanded="true" />
@@ -101,14 +101,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UplinkTests.kt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="UplinkTests.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4496">
-              <caret line="299" column="19" selection-start-line="299" selection-start-column="19" selection-end-line="299" selection-end-column="19" />
+            <state relative-caret-position="328">
+              <caret line="299" column="41" selection-start-line="299" selection-start-column="41" selection-end-line="299" selection-end-column="41" />
               <folding>
                 <element signature="e#0#469#0" expanded="true" />
                 <element signature="e#471#777#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UplinkError.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/UplinkError.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="224">
+              <caret line="24" column="93" selection-start-line="24" selection-start-column="93" selection-end-line="24" selection-end-column="93" />
+              <folding>
+                <element signature="e#506#643#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,18 +132,6 @@
             <state relative-caret-position="256">
               <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UplinkError.kt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/UplinkError.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="57" column="69" selection-start-line="57" selection-start-column="69" selection-end-line="57" selection-end-column="69" />
-              <folding>
-                <element signature="e#506#643#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -494,10 +494,10 @@
         <option value="$PROJECT_DIR$/src/main/kotlin/InitUser.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Types.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Conversation.kt" />
-        <option value="$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/kotlin/Uplink.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/UplinkError.kt" />
+        <option value="$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt" />
       </list>
     </option>
   </component>
@@ -568,6 +568,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -643,7 +644,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -1000,34 +1000,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="UplinkTests - 2016.07.13 at 19h 26m 53s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 15h 07m 52s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.13 at 19h 27m 40s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 15h 08m 37s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.13 at 19h 27m 53s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 24m 43s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.14 at 02h 44m 08s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 25m 20s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 15m 12s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 29m 38s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 17m 45s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 30m 48s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 18m 07s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 31m 01s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 19m 48s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 31m 02s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 21m 50s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 31m 17s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
-    <history-entry file="UplinkTests - 2016.07.15 at 16h 22m 49s.xml">
+    <history-entry file="UplinkTests - 2016.07.16 at 16h 31m 47s.xml">
       <configuration name="UplinkTests" configurationId="GradleRunConfiguration" />
     </history-entry>
   </component>
@@ -1046,6 +1046,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32847896" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32736155" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32847896" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
@@ -1060,13 +1061,12 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990228" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39739415" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25833333" sideWeight="0.50647247" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32736155" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32847896" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Anko DSL Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1085,14 +1085,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/UplinkError.kt</url>
-          <line>24</line>
-          <properties />
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
@@ -1102,7 +1094,7 @@
           <properties />
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="12" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1374,21 +1366,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4496">
-          <caret line="299" column="19" selection-start-line="299" selection-start-column="19" selection-end-line="299" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#469#0" expanded="true" />
-            <element signature="e#471#777#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings.gradle">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/0.15.0/c63b00f19f0105c6b5210a7c09a83396a28e189c/grpc-core-0.15.0-sources.jar!/io/grpc/ManagedChannelBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="145" column="20" selection-start-line="145" selection-start-column="20" selection-end-line="145" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/mcilloni/uplink/nano/UplinkGrpc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1087">
+          <caret line="996" column="0" selection-start-line="996" selection-start-column="0" selection-end-line="996" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/0.15.0/c63b00f19f0105c6b5210a7c09a83396a28e189c/grpc-core-0.15.0-sources.jar!/io/grpc/Status.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1432">
+          <caret line="68" column="19" selection-start-line="68" selection-start-column="19" selection-end-line="68" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -1400,46 +1402,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/0.15.0/c63b00f19f0105c6b5210a7c09a83396a28e189c/grpc-core-0.15.0-sources.jar!/io/grpc/ManagedChannelBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="145" column="20" selection-start-line="145" selection-start-column="20" selection-end-line="145" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Conversation.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16">
-          <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
-          <folding>
-            <element signature="e#508#577#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/github/mcilloni/uplink/nano/UplinkGrpc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1087">
-          <caret line="996" column="0" selection-start-line="996" selection-start-column="0" selection-end-line="996" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Types.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/Uplink.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+        <state relative-caret-position="223">
+          <caret line="81" column="14" selection-start-line="81" selection-start-column="14" selection-end-line="81" selection-end-column="14" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#556#950#0" expanded="true" />
@@ -1447,20 +1413,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/0.15.0/c63b00f19f0105c6b5210a7c09a83396a28e189c/grpc-core-0.15.0-sources.jar!/io/grpc/Status.java">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Conversation.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1432">
-          <caret line="68" column="19" selection-start-line="68" selection-start-column="19" selection-end-line="68" selection-end-column="19" />
-          <folding />
+        <state relative-caret-position="224">
+          <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+          <folding>
+            <element signature="e#508#577#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/Types.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="27" column="24" selection-start-line="27" selection-start-column="24" selection-end-line="27" selection-end-column="24" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/UplinkError.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="57" column="69" selection-start-line="57" selection-start-column="69" selection-end-line="57" selection-end-column="69" />
+        <state relative-caret-position="224">
+          <caret line="24" column="93" selection-start-line="24" selection-start-column="93" selection-end-line="24" selection-end-column="93" />
           <folding>
             <element signature="e#506#643#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/kotlin/UplinkTests.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="299" column="41" selection-start-line="299" selection-start-column="41" selection-end-line="299" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#469#0" expanded="true" />
+            <element signature="e#471#777#0" expanded="true" />
           </folding>
         </state>
       </provider>

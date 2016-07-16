@@ -20,7 +20,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-const val URL = "localhost"
+const val URL = "secondary.nerdz.eu"
 const val PORT = 4444
 
 data class UInfo(val name: String = genRandStr(), val authPass: String = genRandStr())
@@ -76,7 +76,8 @@ class UplinkTests {
         var recvAll2 = SettableFuture.create<Unit>()
     }
 
-    @test fun testANewUser() {
+    @test(expected = NameAlreadyTakenException::class)
+    fun testANewUser() {
         val uinfo = uinfos[0]
 
         println("new $uinfo")
@@ -84,9 +85,12 @@ class UplinkTests {
         val conn = newUser(URL, PORT, uinfo.name, uinfo.authPass)
 
         assert(conn.ping())
+
+        newUser(URL, PORT, uinfo.name, uinfo.authPass) // should throw exception
     }
 
-    @test fun testBLogin() {
+    @test(expected = AuthFailException::class)
+    fun testBLogin() {
         val uinfo = uinfos[0]
 
         println("login as $uinfo")
@@ -97,6 +101,8 @@ class UplinkTests {
 
         sessInfo = conn.sessInfo
         println("got session $sessInfo")
+
+        login(URL, PORT, "fake_user_not_existing", "definitelyfake")
     }
 
     @test fun testCResume() {
@@ -279,8 +285,8 @@ class UplinkTests {
         thread { messages1.forEach { conv1?.send(it) }}
         thread { messages2.forEach { conv2?.send(it) }}
 
-        recvAll1.get(2, TimeUnit.SECONDS)
-        recvAll2.get(2, TimeUnit.SECONDS)
+        recvAll1.get(5, TimeUnit.SECONDS)
+        recvAll2.get(5, TimeUnit.SECONDS)
 
         println("Recv1: ${recvBy1}")
         println("Recv2: ${recvBy2}")

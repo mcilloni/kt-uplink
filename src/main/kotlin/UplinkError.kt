@@ -22,7 +22,7 @@ internal inline fun <T> rpc(body: () -> T) = try {
 } catch (e: ExecutionException) {
     throw normExc(e.cause ?: throw e)
 } catch (e: StatusRuntimeException) {
-    throw if (e.status.code == Status.Code.UNAVAILABLE) UnavailableException() else e
+    throw if (e.status.code == Status.Code.UNAVAILABLE) UnavailableException() else normExc(e)
 }
 
 internal fun normExc(e: Throwable) : Throwable {
