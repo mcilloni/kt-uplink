@@ -12,9 +12,20 @@
 
 package com.github.mcilloni.uplink;
 
+import com.github.mcilloni.uplink.nano.UplinkProto
 import java.util.*
 
 class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String, val time : Date = Date()) {
+
+    internal constructor(convID: Long, netMsg: UplinkProto.Message)
+        : this(
+            tag = netMsg.tag,
+            sender = netMsg.senderName,
+            convID = convID,
+            body = netMsg.body,
+            time = Date(netMsg.timestamp * 1000L)
+        )
+
     val svcMessage = sender == "uplink"
 
     override fun toString(): String{

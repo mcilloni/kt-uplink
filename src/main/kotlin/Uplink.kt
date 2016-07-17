@@ -141,21 +141,31 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
 
     fun getConversations() = rpc {
         stubs.blockingStub.conversations(UplinkProto.Empty()).convs.map {
-            Conversation(it.name, it.id, this)
+            Conversation(it, this)
         }
     }
 
-    fun getFriends() = rpc {
+    fun getFriends() : Array<String> = rpc {
         stubs.blockingStub.friends(UplinkProto.Empty()).friends
     }
 
-    fun getFriendshipRequests() = rpc {
+    fun getFriendshipRequests() : Array<String> = rpc {
         stubs.blockingStub.receivedRequests(UplinkProto.Empty()).friends
     }
 
     fun getInvites() = rpc {
         stubs.blockingStub.invites(UplinkProto.Empty()).invites.map {
             Invite(fromUser = it.who, toConv = it.convName, convID = it.convId)
+        }
+    }
+
+    fun getConversationFor(convID: Long) = rpc {
+        stubs.blockingStub.conversationInfo(with(UplinkProto.ID()){
+            id = convID
+
+            this
+        }).let {
+            Conversation(it, this)
         }
     }
 
@@ -180,10 +190,10 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
         }).success
     }
 
-    infix fun subscribe (handl: NotificationHandler) {
+    infix fun subscribe (handler: NotificationHandler) : UplinkConnection {
         stubs.asyncStub.notifications(UplinkProto.Empty(), object : StreamObserver<UplinkProto.Notification> {
             override fun onError(t: Throwable?) {
-                handl.onError(t ?: NullPointerException())
+                handler.onError(t ?: NullPointerException())
             }
 
             override fun onCompleted() {}
@@ -193,27 +203,27 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
                     with (value) {
                         when (type) {
                             Notification.HANDLER_READY -> {
-                                handl.onServerReady()
+                                handler.onServerReady()
                             }
 
                             Notification.MESSAGE -> {
-                                handl.onNewMessage(Message(msgTag, userName, convId, body))
+                                handler.onNewMessage(Message(msgTag, userName, convId, body))
                             }
 
                             Notification.JOIN_REQ -> {
-                                handl.onConversationInvite(ConversationInvite(userName, Conversation(convName, convId, this@UplinkConnection)))
+                                handler.onConversationInvite(ConversationInvite(userName, Conversation(convName, convId, this@UplinkConnection)))
                             }
 
                             Notification.JOIN_ACC -> {
-                                handl.onNewUserInConversation(userName, Conversation(convName, convId, this@UplinkConnection))
+                                handler.onNewUserInConversation(userName, Conversation(convName, convId, this@UplinkConnection))
                             }
 
                             Notification.FRIENDSHIP_REQ -> {
-                                handl.onFriendRequest(userName)
+                                handler.onFriendRequest(userName)
                             }
 
                             Notification.FRIENDSHIP_ACC -> {
-                                handl.onNewFriendship(userName)
+                                handler.onNewFriendship(userName)
                             }
                         }
                     }
@@ -221,6 +231,8 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
             }
 
         })
+
+        return this
     }
 
     fun submitPushRegistrationId(regID: String) = rpc {

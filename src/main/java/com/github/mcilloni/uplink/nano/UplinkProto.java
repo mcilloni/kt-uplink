@@ -934,6 +934,9 @@ public interface UplinkProto {
     // optional string name = 2;
     public java.lang.String name;
 
+    // optional .protodef.Message last_message = 3;
+    public com.github.mcilloni.uplink.nano.UplinkProto.Message lastMessage;
+
     public Conversation() {
       clear();
     }
@@ -941,6 +944,7 @@ public interface UplinkProto {
     public Conversation clear() {
       id = 0L;
       name = "";
+      lastMessage = null;
       cachedSize = -1;
       return this;
     }
@@ -953,6 +957,9 @@ public interface UplinkProto {
       }
       if (!this.name.equals("")) {
         output.writeString(2, this.name);
+      }
+      if (this.lastMessage != null) {
+        output.writeMessage(3, this.lastMessage);
       }
       super.writeTo(output);
     }
@@ -967,6 +974,10 @@ public interface UplinkProto {
       if (!this.name.equals("")) {
         size += com.google.protobuf.nano.CodedOutputByteBufferNano
             .computeStringSize(2, this.name);
+      }
+      if (this.lastMessage != null) {
+        size += com.google.protobuf.nano.CodedOutputByteBufferNano
+          .computeMessageSize(3, this.lastMessage);
       }
       return size;
     }
@@ -992,6 +1003,13 @@ public interface UplinkProto {
           }
           case 18: {
             this.name = input.readString();
+            break;
+          }
+          case 26: {
+            if (this.lastMessage == null) {
+              this.lastMessage = new com.github.mcilloni.uplink.nano.UplinkProto.Message();
+            }
+            input.readMessage(this.lastMessage);
             break;
           }
         }

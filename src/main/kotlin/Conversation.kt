@@ -15,12 +15,26 @@ package com.github.mcilloni.uplink;
 import com.github.mcilloni.uplink.nano.UplinkProto
 import java.util.*
 
-open class Conversation internal constructor (val name: String, val convID: Long, private val connection: UplinkConnection) {
-    var finished = false
-        private set
+open class Conversation internal constructor (val name: String, val convID: Long,
+                                              private val connection: UplinkConnection, firstMsg: Message? = null) {
+
+    internal constructor(netConv: UplinkProto.Conversation, conn: UplinkConnection)
+        : this(
+            name = netConv.name,
+            convID = netConv.id,
+            connection = conn,
+            firstMsg = if (netConv.lastMessage != null) Message(netConv.id, netConv.lastMessage) else null
+        )
 
     private val cached = ArrayList<Message>(20)
     private var lastTag = 0L
+
+    init {
+        if (firstMsg != null) {
+            cached.add(firstMsg)
+            lastTag = firstMsg.tag
+        }
+    }
 
     fun next() : List<Message> {
         val next = getMessages(lastTag)
@@ -41,13 +55,7 @@ open class Conversation internal constructor (val name: String, val convID: Long
 
             this
         }).messages.map {
-            Message(
-                tag = it.tag,
-                sender = it.senderName,
-                convID = convID,
-                body = it.body,
-                time = Date(it.timestamp * 1000L)
-            )
+            Message(convID, it)
         }
     }
 
@@ -80,5 +88,9 @@ open class Conversation internal constructor (val name: String, val convID: Long
         result = 31 * result + convID.hashCode()
         result = 31 * result + connection.hashCode()
         return result
+    }
+
+    override fun toString(): String{
+        return "Conversation(name='$name', convID=$convID, cached=$cached)"
     }
 }

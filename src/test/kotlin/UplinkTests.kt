@@ -285,8 +285,8 @@ class UplinkTests {
         thread { messages1.forEach { conv1?.send(it) }}
         thread { messages2.forEach { conv2?.send(it) }}
 
-        recvAll1.get(5, TimeUnit.SECONDS)
-        recvAll2.get(5, TimeUnit.SECONDS)
+        recvAll1.get()
+        recvAll2.get()
 
         println("Recv1: ${recvBy1}")
         println("Recv2: ${recvBy2}")
@@ -297,11 +297,11 @@ class UplinkTests {
 
     @test fun testMReadConversation() {
         var msgs = conv1?.next().orEmpty()
-        println("Conv (first 20): $msgs")
+        println("Conv1 (first 20): $msgs")
         assert(msgs.size == 20)
 
         msgs = conv1?.next().orEmpty()
-        println("Conv (whole): $msgs")
+        println("Conv1 (whole): $msgs")
 
         assert(msgs.size == 26)
         assert(messages1 == msgs.filter{it.sender == uinfos[0].name}.map{it.body})
