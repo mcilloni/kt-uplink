@@ -93,4 +93,11 @@ open class Conversation internal constructor (val name: String, val convID: Long
     override fun toString(): String{
         return "Conversation(name='$name', convID=$convID, cached=$cached)"
     }
+
+    val lastMessage : Message?
+        get() = try {
+            cached.last()
+        } catch(e: NoSuchElementException) {
+            null
+        }
 }

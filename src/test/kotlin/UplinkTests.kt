@@ -306,5 +306,8 @@ class UplinkTests {
         assert(msgs.size == 26)
         assert(messages1 == msgs.filter{it.sender == uinfos[0].name}.map{it.body})
         assert(messages2 == msgs.filter{it.sender == uinfos[1].name}.map{it.body})
+
+        assert(conv1?.lastMessage?.tag == 26L)
+        println("Last message: ${conv1?.lastMessage}")
     }
 }
