@@ -10,12 +10,13 @@
  *
  */
 
-package com.github.mcilloni.uplink;
+package com.github.mcilloni.uplink
 
 import com.github.mcilloni.uplink.nano.UplinkProto
 import java.util.*
 
-class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String, val time : Date = Date()) {
+class Message internal constructor (val tag: Long, val sender: String, val convID: Long, val body: String,
+                                        val time : Date = Date()) {
 
     internal constructor(convID: Long, netMsg: UplinkProto.Message)
         : this(

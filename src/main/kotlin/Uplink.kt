@@ -20,8 +20,6 @@ import com.github.mcilloni.uplink.nano.UplinkProto
 import com.github.mcilloni.uplink.nano.UplinkProto.Notification
 import io.grpc.ManagedChannelBuilder
 import io.grpc.Metadata
-import io.grpc.Status
-import io.grpc.StatusException
 import io.grpc.stub.MetadataUtils
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.ExecutionException
@@ -172,6 +170,9 @@ class UplinkConnection internal constructor(internal val stubs: Stubs, val sessI
     fun ping() = rpc {
         stubs.blockingStub.ping(UplinkProto.Empty()).success
     }
+
+    // Not verified - may explode horribly
+    fun recreateConversation(name: String, id: Long) = Conversation(name, id, this)
 
     fun sendFriendshipRequest(user: String) = rpc {
         stubs.blockingStub.requestFriendship(with(UplinkProto.Name()){
