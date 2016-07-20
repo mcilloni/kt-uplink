@@ -26,7 +26,7 @@ open class Conversation internal constructor (val name: String, val convID: Long
             firstMsg = if (netConv.lastMessage != null) Message(netConv.id, netConv.lastMessage) else null
         )
 
-    private val cached = ArrayList<Message>(20)
+    private var cached = ArrayList<Message>(20)
     private var lastTag = 0L
 
     init {
@@ -40,11 +40,28 @@ open class Conversation internal constructor (val name: String, val convID: Long
         val next = getMessages(lastTag)
 
         if (next.size > 0) {
-            lastTag = next[0].tag
+            lastTag = next.first().tag
 
             cached.addAll(0, next)
         }
 
+        return cached
+    }
+
+    fun update() : List<Message> {
+        if (lastTag == 0L) {
+            return next()
+        }
+
+        val newMsgs = ArrayList<Message>(20)
+        var last = 0L
+        do {
+            val messages = getMessages(last)
+            newMsgs.addAll(0, messages)
+            last = newMsgs.first().tag
+        } while(last <= lastTag)
+
+        cached = newMsgs
         return cached
     }
 
